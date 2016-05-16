@@ -14,8 +14,18 @@ import java.net.Socket;
  * @author אליצור
  */
 public class Client {
+
+    public static void main (String [] args){
     Socket soc;
     BufferedReader in;
     PrintWriter out;
+        try{
+           soc = new Socket("127.0.0.1", 5555);
+           
+       }catch(Exception e){
+           
+       }
+               
+    }
     
 }
