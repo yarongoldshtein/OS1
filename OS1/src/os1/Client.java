@@ -6,8 +6,13 @@
 package os1;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
  *
@@ -15,17 +20,21 @@ import java.net.Socket;
  */
 public class Client {
 
-    public static void main (String [] args){
-    Socket soc;
-    BufferedReader in;
-    PrintWriter out;
-        try{
-           soc = new Socket("127.0.0.1", 5555);
-           
-       }catch(Exception e){
-           
-       }
-               
+    public static void main(String[] args) {
+        Socket soc;
+        BufferedReader in;
+        PrintWriter out;
+
+        try {
+            soc = new Socket("127.0.0.1", 5555);
+
+            InputStreamReader sr = new InputStreamReader(soc.getInputStream());
+            in = new BufferedReader(sr);
+            out = new PrintWriter(soc.getOutputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
-    
+
 }
