@@ -49,6 +49,8 @@ public class Client {
         int r1 = Integer.parseInt(args[0]);
         int r2 = Integer.parseInt(args[1]);
         String file = args[2];
+        
+        
         int x = getX(ArrayOfPre(null));
         
         try {
