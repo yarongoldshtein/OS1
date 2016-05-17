@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -48,7 +47,7 @@ public class Client {
         PrintWriter out;
         int r1 = Integer.parseInt("1");
         int r2 = Integer.parseInt("4");
-        String file = "C:\\Users\\yaron\\Desktop\\new\\0.txt";
+        String file = "ProbabilityFiles\\0.txt";
         int[] ArrayOfPreformance = new int[1000];
         FileReader fr;
         try {

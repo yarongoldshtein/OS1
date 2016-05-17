@@ -7,7 +7,6 @@ package os1;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,7 +20,6 @@ public class ThreadPool {
     private List<PoolThread> threads = new ArrayList<PoolThread>();
     private boolean isStopped = false;
     private final Lock lock = new ReentrantLock();
-    private Condition condVar = lock.newCondition();
 
     public ThreadPool(int numOfThreads, int maxNumOfTasks) {
         taskQueue = new BlockingQueue(maxNumOfTasks);
@@ -36,12 +34,14 @@ public class ThreadPool {
 
     public  void execute(Runnable task) throws Exception {
         try {
+            lock.lock();
             if (this.isStopped) {
             throw new IllegalStateException("ThreadPool is stopped");
         }
 
         this.taskQueue.enqueue(task);
-        } catch (Exception e) {
+        } finally {
+            lock.unlock();
         }
         
     }

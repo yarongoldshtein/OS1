@@ -42,7 +42,7 @@ public class BlockingQueue {
 
     }
 
-    public  Object dequeue() throws InterruptedException {// בעיה עם ההחזרה ושחרור הנעילה
+    public  void dequeue(Runnable runnable) throws InterruptedException {// בעיה עם ההחזרה ושחרור הנעילה
         try {
             lock.lock();
              while (this.queue.size() == 0) { //cheack if queue empty
@@ -51,11 +51,11 @@ public class BlockingQueue {
         if (this.queue.size() == this.limit) {
             cond.signalAll();
         }
-        
+        runnable = (Runnable)this.queue.remove(0);       
         } finally {
             lock.unlock();
         }
-        return this.queue.remove(0);
+         
     }
 
 }
