@@ -1,28 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package os1;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
- * @author אליצור
+ * @author yaron
  */
 public class ThreadPool {
 
     private BlockingQueue taskQueue = null;
-    private List<PoolThread> threads = new ArrayList<PoolThread>();
+    private List<PoolThread> threads = new ArrayList<>();
     private boolean isStopped = false;
-    private final Lock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock(true);
 
-    public ThreadPool(int numOfThreads, int maxNumOfTasks) {
-        taskQueue = new BlockingQueue(maxNumOfTasks);
+    public ThreadPool(int numOfThreads) {
+        taskQueue = new BlockingQueue();
 
         for (int i = 0; i < numOfThreads; i++) {
             threads.add(new PoolThread(taskQueue));
@@ -32,25 +26,23 @@ public class ThreadPool {
         }
     }
 
-    public  void execute(Runnable task) throws Exception {
+    public void execute(Runnable task) throws InterruptedException  {
+         lock.lock();
         try {
-            lock.lock();
             if (this.isStopped) {
-            throw new IllegalStateException("ThreadPool is stopped");
-        }
-
-        this.taskQueue.enqueue(task);
+                throw new IllegalStateException("ThreadPool is stopped");
+            }
+            this.taskQueue.enqueue(task);
         } finally {
             lock.unlock();
         }
-        
+
     }
 
     public void stop() {
-        try {
-            lock.lock();
+         lock.lock();
+        try {          
             this.isStopped = true;
-
             for (PoolThread thread : threads) {
                 thread.doStop();
             }
@@ -58,5 +50,4 @@ public class ThreadPool {
             lock.unlock();
         }
     }
-
 }
