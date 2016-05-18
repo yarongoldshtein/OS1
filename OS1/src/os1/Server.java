@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,7 +22,14 @@ public class Server implements Runnable {
 
     private ServerSocket ServSoc;
     static int id = 0;
-    int y;
+    private int y;
+    ThreadPool threadPoolOfReaders;
+    private int L;
+
+    public Server(int namOfThreads, int L) {
+        threadPoolOfReaders = new ThreadPool(namOfThreads);
+        this.L = L;
+    }
 
     @Override
     public void run() {
@@ -37,7 +46,14 @@ public class Server implements Runnable {
                         out.println("" + id++);
                         out.flush();
                     } else {
-                        y = Integer.parseInt(str) + 1;
+                        int x = Integer.parseInt(in.readLine());
+                        ReadDataBase rdb = new ReadDataBase(x);
+                        threadPoolOfReaders.execute(rdb);
+                        rdb.run();
+                        y = rdb.getY();
+                        WriteDataBase wdb = new WriteDataBase(x, L);
+                        wdb.run();
+                        y = wdb.getY();
                         out.println("" + y);
                         out.flush();
                     }
@@ -45,6 +61,8 @@ public class Server implements Runnable {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
