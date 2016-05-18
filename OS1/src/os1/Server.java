@@ -11,8 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,30 +27,25 @@ public class Server implements Runnable {
         String str;
         try {
             ServSoc = new ServerSocket(4500);
-            Socket clientSoc = ServSoc.accept();
-            PrintWriter out = new PrintWriter(clientSoc.getOutputStream());
-            InputStreamReader sr = new InputStreamReader(clientSoc.getInputStream());
-            BufferedReader in = new BufferedReader(sr);
-            while ((str = in.readLine()) != null) {
-                if (str.equals("id")) {
-                    out.println("" + id++);
-                    out.flush();
-                }
-                else{
-                   y = Integer.parseInt(str)+1;
-                   out.println(""+y);
-                   out.flush();
+            while (true) {
+                Socket clientSoc = ServSoc.accept();
+                PrintWriter out = new PrintWriter(clientSoc.getOutputStream());
+                InputStreamReader sr = new InputStreamReader(clientSoc.getInputStream());
+                BufferedReader in = new BufferedReader(sr);
+                while ((str = in.readLine()) != null) {
+                    if (str.equals("id")) {
+                        out.println("" + id++);
+                        out.flush();
+                    } else {
+                        y = Integer.parseInt(str) + 1;
+                        out.println("" + y);
+                        out.flush();
+                    }
                 }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        Thread s = new Thread(new Server());
-        s.start();
-
     }
 
 }

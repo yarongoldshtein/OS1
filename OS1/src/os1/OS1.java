@@ -5,6 +5,9 @@
  */
 package os1;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  *
  * @author אליצור
@@ -15,8 +18,10 @@ public class OS1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("hi");
+        new Thread(new Server()).start();
+        new Thread(new Client()).start();
+        new Thread(new Client()).start();
+
     }
-    
+
 }

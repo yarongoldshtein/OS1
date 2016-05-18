@@ -12,12 +12,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 /**
  *
  * @author אליצור
  */
-public class Client {
+public class Client implements Runnable{
 
     public static int getX(int[] ArrayOfPreformance) {
         int x = (int) (Math.random() * 1000);
@@ -41,8 +40,9 @@ public class Client {
         return ans;
     }
 
-    public static void main(String[] args) {
-        Socket soc;
+    @Override
+     public void run() {
+       Socket soc;
         BufferedReader in;
         PrintWriter out;
         int r1 = Integer.parseInt("1");
@@ -60,11 +60,11 @@ public class Client {
             InputStreamReader sr = new InputStreamReader(soc.getInputStream());
             in = new BufferedReader(sr);
             out = new PrintWriter(soc.getOutputStream());
-            int x = getX(ArrayOfPreformance);
             int id, y;
             out.println("id");
             out.flush();
             id = Integer.parseInt(in.readLine());
+             int x = getX(ArrayOfPreformance);
             System.out.println("Client<" + id + ">:sending " + x);
             out.println(x);
             out.flush();
