@@ -46,14 +46,21 @@ public class Server implements Runnable {
                         out.println("" + id++);
                         out.flush();
                     } else {
-                        int x = Integer.parseInt(in.readLine());
-                        ReadDataBase rdb = new ReadDataBase(x);
-                        threadPoolOfReaders.execute(rdb);
+                        int x = Integer.parseInt(str);
+                        ReadDataBase rdb = new ReadDataBase(x, L);
+                        // threadPoolOfReaders.execute(rdb);
                         rdb.run();
                         y = rdb.getY();
-                        WriteDataBase wdb = new WriteDataBase(x, L);
-                        wdb.run();
-                        y = wdb.getY();
+                        if (y >= 0) {
+                            UpdateDataBase up = new UpdateDataBase(x, L);
+                            up.run();
+
+                        } else {
+                            WriteDataBase wdb = new WriteDataBase(x, L);
+                            wdb.run();
+                            y = wdb.getY();
+
+                        }
                         out.println("" + y);
                         out.flush();
                     }

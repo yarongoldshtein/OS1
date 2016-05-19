@@ -20,32 +20,40 @@ public class ReadDataBase implements Runnable {
 
     private int x;
     private int y;
+    private int L;
 
-    public ReadDataBase(int x) {
+    public ReadDataBase(int x, int L) {
+        this.L = L;
         this.x = x;
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     @Override
     public void run() {
-        int ans = 0, sizeOfDb = 1000;
+        int ans, sizeOfDb = L;
         try {
             File dir = new File("DataBase");
             dir.mkdir();
             String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
-            RandomAccessFile raf = new RandomAccessFile(nameOfFile, "r");
+            RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8);
-            ans = raf.readInt();
+            ans = raf.read();
+            if (ans >= 0) {
+                raf.seek((x % sizeOfDb) * 8);
+                System.out.println("ans before " + ans);
+                ans = raf.readInt();
+                if(ans==0){
+                    ans=-1;
+                }
+                System.out.println("ans after " + ans);
+
+            }
             this.y = ans;
         } catch (IOException ex) {
             Logger.getLogger(ReadDataBase.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
-    
-    public int getY(){
+
+    public int getY() {
         return y;
     }
 

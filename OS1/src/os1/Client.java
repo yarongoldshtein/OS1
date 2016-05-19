@@ -16,7 +16,7 @@ import java.net.Socket;
  *
  * @author אליצור
  */
-public class Client implements Runnable{
+public class Client implements Runnable {
 
     public static int getX(int[] ArrayOfPreformance) {
         int x = (int) (Math.random() * 1000);
@@ -41,8 +41,8 @@ public class Client implements Runnable{
     }
 
     @Override
-     public void run() {
-       Socket soc;
+    public void run() {
+        Socket soc;
         BufferedReader in;
         PrintWriter out;
         int r1 = Integer.parseInt("1");
@@ -64,12 +64,16 @@ public class Client implements Runnable{
             out.println("id");
             out.flush();
             id = Integer.parseInt(in.readLine());
-             int x = getX(ArrayOfPreformance);
-            System.out.println("Client<" + id + ">:sending " + x);
-            out.println(x);
-            out.flush();
-            y = Integer.parseInt(in.readLine());
-            System.out.println("Client<" + id + ">:got reply " + y + " for query " + x);
+            int i = 0;
+            while (i<10) {
+                int x = getX(ArrayOfPreformance);
+                System.out.println("Client<" + id + ">:sending " + x);
+                out.println(x);
+                out.flush();
+                y = Integer.parseInt(in.readLine());
+                System.out.println("Client<" + id + ">:got reply " + y + " for query " + x+"\n");
+                i++;
+            }
 
         } catch (IOException ex) {
             ex.printStackTrace();

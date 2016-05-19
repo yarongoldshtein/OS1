@@ -14,43 +14,39 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author אליצור
+ * @author yaron
  */
-public class WriteDataBase implements Runnable {
+public class UpdateDataBase implements Runnable {
 
     private int x;
     private int L;
     private int y;
     private final static int random = (int) (Math.random() * 10000);
 
-    public WriteDataBase(int x, int L) {
+    public UpdateDataBase(int x, int L) {
         this.x = x;
         this.L = L;
     }
 
     @Override
     public void run() {
-        int sizeOfDb = L;
-        File dir = new File("DataBase");
-        String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
-        
         try {
-            RandomAccessFile raf= new RandomAccessFile(nameOfFile, "rw");
-            raf.seek((x % sizeOfDb) * 8);
-            raf.writeInt(((random + x) % L) + 1);
+            int sizeOfDb = L;
+            File dir = new File("DataBase");
+            String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8 + 4);
-            raf.writeInt(1);
-            y = ((random + x) % L) + 1;
+            int z = raf.readInt();
+            z++;
+            raf.seek((x % sizeOfDb) * 8 + 4);
+            raf.writeInt(z);
+            System.out.println("z = "+z);
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UpdateDataBase.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UpdateDataBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
-    public int getY() {
-        return y;
-    }
 }
