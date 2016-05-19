@@ -10,21 +10,27 @@ package os1;
  * @author אליצור
  */
 public class catchNode {
-    
+
     private int x;
     private int y;
     private int z;
-    private catchNode father;
 
-    public catchNode(int x, int y, int z, catchNode father) {
+    public catchNode() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
+    public catchNode(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.father = father;
     }
 
-    public void setFather(catchNode father) {
-        this.father = father;
+    public catchNode(catchNode other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
     }
 
     public int getX() {
@@ -39,45 +45,43 @@ public class catchNode {
         return z;
     }
 
-    public catchNode getFather() {
-        return father;
-    }
-
     /**
-     * compare 2 catchNode per their Y
+     * compare 2 catchNode per their x
+     *
      * @param other
-     * @return   1 if | this.y > other.y ; 0 this.y = other.y ; -1 this.y <  other.y
-
+     * @return 1 if this.x > other.x ; 0 this.x = other.x ; -1 this.x < other.x
+     *
      */
-    public int comparePerY(catchNode other){
+    public int comparePerX(catchNode other) {
         int ans = 0;
-        if(this.y  > other.y){
+        if (this.x > other.getX()) {
             ans = 1;
         }
-        if(this.y == other.y){
+        if (this.x == other.getX()) {
             ans = 0;
         }
-        if(this.y < other.y){
+        if (this.x < other.getX()) {
             ans = -1;
         }
         return ans;
     }
-    
-    /**
-     *  compare 2 catchNode per their z
-     * @param other
-     * @return  1 if | this.z > other.z ; 0 this.z = other.z ; -1 this.z <  other.z
 
+    /**
+     * compare 2 catchNode per their z
+     *
+     * @param other
+     * @return 1 if this.z > other.z ; 0 this.z = other.z ; -1 this.z < other.z
+     *
      */
-    public int comparePerZ(catchNode other){
+    public int comparePerZ(catchNode other) {
         int ans = 0;
-        if(this.z  > other.z){
+        if (this.z > other.getZ()) {
             ans = 1;
         }
-        if(this.z == other.z){
+        if (this.z == other.getZ()) {
             ans = 0;
         }
-        if(this.z < other.z){
+        if (this.z < other.getZ()) {
             ans = -1;
         }
         return ans;

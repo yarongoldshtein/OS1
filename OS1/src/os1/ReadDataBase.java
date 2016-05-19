@@ -39,13 +39,10 @@ public class ReadDataBase implements Runnable {
             ans = raf.read();
             if (ans >= 0) {
                 raf.seek((x % sizeOfDb) * 8);
-                System.out.println("ans before " + ans);
                 ans = raf.readInt();
                 if(ans==0){
                     ans=-1;
                 }
-                System.out.println("ans after " + ans);
-
             }
             this.y = ans;
         } catch (IOException ex) {
