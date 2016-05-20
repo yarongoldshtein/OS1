@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
@@ -24,9 +25,9 @@ public class OS1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Thread(new Server(5,10)).start();
-        new Thread(new Client()).start();
-     //   new Thread(new Client()).start();
+//        new Thread(new Server(5,10)).start();
+//        new Thread(new Client()).start();
+        //   new Thread(new Client()).start();
 //        File dir = new File("DataBase");
 //        dir.mkdir();
 //        for (int i = 0; i < 5; i++) {
@@ -45,6 +46,13 @@ public class OS1 {
 //                Logger.getLogger(OS1.class.getName()).log(Level.SEVERE, null, ex);
 //            }
 //        }
+        cacheNode[] arr = new cacheNode[5];
+        for (int i = 0; i < 5; i++) {
+            arr[i] = new cacheNode(i, i + 1,10-i);
+        }
+        System.out.println(Arrays.toString(arr));
+         MinHeap mh = new MinHeap(arr);
+         mh.buildMinHeap();
+         mh.print();
     }
 }
-    

@@ -7,27 +7,27 @@ package os1;
 
 /**
  *
- * @author אליצור
+ * @author yaron
  */
-public class catchNode {
+public class cacheNode {
 
     private int x;
     private int y;
     private int z;
 
-    public catchNode() {
+    public cacheNode() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
     }
 
-    public catchNode(int x, int y, int z) {
+    public cacheNode(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public catchNode(catchNode other) {
+    public cacheNode(cacheNode other) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
@@ -46,13 +46,13 @@ public class catchNode {
     }
 
     /**
-     * compare 2 catchNode per their x
+     * compare 2 cacheNode per their x
      *
      * @param other
      * @return 1 if this.x > other.x ; 0 this.x = other.x ; -1 this.x < other.x
      *
      */
-    public int comparePerX(catchNode other) {
+    public int comparePerX(cacheNode other) {
         int ans = 0;
         if (this.x > other.getX()) {
             ans = 1;
@@ -67,13 +67,13 @@ public class catchNode {
     }
 
     /**
-     * compare 2 catchNode per their z
+     * compare 2 cacheNode per their z
      *
      * @param other
      * @return 1 if this.z > other.z ; 0 this.z = other.z ; -1 this.z < other.z
      *
      */
-    public int comparePerZ(catchNode other) {
+    public int comparePerZ(cacheNode other) {
         int ans = 0;
         if (this.z > other.getZ()) {
             ans = 1;
@@ -86,4 +86,10 @@ public class catchNode {
         }
         return ans;
     }
+
+    @Override
+    public String toString() {
+        return "{" + "x=" + x + ", y=" + y + ", z=" + z + '}';
+    }
+    
 }

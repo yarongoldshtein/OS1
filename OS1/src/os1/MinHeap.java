@@ -11,12 +11,7 @@ package os1;
  */
 public class MinHeap {
 
-    /**
-     *
-     * @author Yaron
-     *
-     */
-    private catchNode acn[];
+    private cacheNode acn[];
     private int size;
 
     /**
@@ -24,11 +19,11 @@ public class MinHeap {
      *
      * @param arr - array of number that build the MinHeap
      */
-    public MinHeap(catchNode[] arr) {
+    public MinHeap(cacheNode[] arr) {
         this.size = arr.length;
-        this.acn = new catchNode[size];
+        this.acn = new cacheNode[size];
         for (int i = 0; i < size; i++) {
-            acn[i] = new catchNode(arr[i]);
+            acn[i] = new cacheNode(arr[i]);
         }
     }
 
@@ -94,9 +89,9 @@ public class MinHeap {
      * @param j - index of the other number
      */
     private void exchange(int i, int j) {
-        catchNode temp =new catchNode(acn[i]);
-        acn[i] =new catchNode(acn[j]);
-        acn[j] =new catchNode(temp);
+        cacheNode temp =new cacheNode(acn[i]);
+        acn[i] =new cacheNode(acn[j]);
+        acn[j] =new cacheNode(temp);
     }
 
     /**
@@ -109,13 +104,13 @@ public class MinHeap {
     }
 
     /**
-     * insert new catchNode to the minHeap
+     * insert new cacheNode to the minHeap
      *
      * @param val - new number
      */
-    public void minHeapInsert(catchNode val) {
+    public void minHeapInsert(cacheNode val) {
         resize(1);
-        acn[size - 1] = new catchNode(0,0,999999);
+        acn[size - 1] = new cacheNode(0,0,999999);
         heapDecreaseKey(size - 1, val);
     }
 
@@ -125,9 +120,9 @@ public class MinHeap {
      * @param increment - the difference between the old array and the new array
      */
     private void resize(int increment) {
-        catchNode temp[] = new catchNode[size + increment];
+        cacheNode temp[] = new cacheNode[size + increment];
         for (int i = 0; i < size; i++) {
-            temp[i] =new catchNode(acn[i]);
+            temp[i] =new cacheNode(acn[i]);
         }
         acn = temp;
         size = size + increment;
@@ -139,9 +134,9 @@ public class MinHeap {
      * @param i - the index
      * @param val - the value
      */
-    private void heapDecreaseKey(int i, catchNode val) {
+    private void heapDecreaseKey(int i, cacheNode val) {
         if (val.comparePerZ(acn[i])<=0) {
-            acn[i] =new catchNode(val);
+            acn[i] =new cacheNode(val);
             while (i > 0 && acn[parent(i)].comparePerZ(acn[i])==1) {
                 exchange(i, parent(i));
                 i = parent(i);
@@ -169,8 +164,8 @@ public class MinHeap {
      *
      * @return - the smallest number of the minHeap
      */
-    public catchNode heapExtractMin() {
-        catchNode min = new catchNode(0,0,9999999);
+    public cacheNode heapExtractMin() {
+        cacheNode min = new cacheNode(0,0,9999999);
         if (!isEmpty()) {
             min = acn[0];
             acn[0] = acn[size - 1];
@@ -194,7 +189,7 @@ public class MinHeap {
      */
     public void print() {
         for (int i = 0; i < size; i++) {
-            System.out.print(acn[i] + ", ");
+            System.out.print(acn[i] + " , ");
         }
         System.out.println();
     }
