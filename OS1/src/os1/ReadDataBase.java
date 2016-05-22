@@ -20,16 +20,14 @@ public class ReadDataBase implements Runnable {
 
     private int x;
     private int y;
-    private int L;
 
-    public ReadDataBase(int x, int L) {
-        this.L = L;
+    public ReadDataBase(int x) {
         this.x = x;
     }
 
     @Override
     public void run() {
-        int ans, sizeOfDb = L;
+        int ans, sizeOfDb = 1000;
         try {
             File dir = new File("DataBase");
             dir.mkdir();

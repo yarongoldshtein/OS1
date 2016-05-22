@@ -19,19 +19,17 @@ import java.util.logging.Logger;
 public class UpdateDataBase implements Runnable {
 
     private int x;
-    private int L;
     private int y;
     private final static int random = (int) (Math.random() * 10000);
 
-    public UpdateDataBase(int x, int L) {
+    public UpdateDataBase(int x) {
         this.x = x;
-        this.L = L;
     }
 
     @Override
     public void run() {
         try {
-            int sizeOfDb = L;
+            int sizeOfDb = 1000;
             File dir = new File("DataBase");
             String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");

@@ -42,8 +42,8 @@ public class randomacsses {
 //            Logger.getLogger(randomacsses.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
-        new Thread(new ReadDataBase(5, 10)).start();
-        new Thread(new WriteDataBase(5, 10)).start();
-        new Thread(new UpdateDataBase(5, 10)).start();
+        new Thread(new ReadDataBase(5)).start();
+        new Thread(new WriteDataBase(5)).start();
+        new Thread(new UpdateDataBase(5)).start();
     }
 }

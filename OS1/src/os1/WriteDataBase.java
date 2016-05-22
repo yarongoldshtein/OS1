@@ -19,28 +19,26 @@ import java.util.logging.Logger;
 public class WriteDataBase implements Runnable {
 
     private int x;
-    private int L;
     private int y;
     private final static int random = (int) (Math.random() * 10000);
 
-    public WriteDataBase(int x, int L) {
+    public WriteDataBase(int x) {
         this.x = x;
-        this.L = L;
     }
 
     @Override
     public void run() {
-        int sizeOfDb = L;
+        int sizeOfDb = 1000;
         File dir = new File("DataBase");
         String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
         
         try {
             RandomAccessFile raf= new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8);
-            raf.writeInt(((random + x) % L) + 1);
+            raf.writeInt(((random + x) % sizeOfDb) + 1);
             raf.seek((x % sizeOfDb) * 8 + 4);
             raf.writeInt(1);
-            y = ((random + x) % L) + 1;
+            y = ((random + x) % sizeOfDb) + 1;
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);

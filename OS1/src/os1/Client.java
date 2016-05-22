@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -18,11 +19,13 @@ import java.net.Socket;
  */
 public class Client implements Runnable {
 
-    public static int getX(int[] ArrayOfPreformance) {
-        int x = (int) (Math.random() * 1000);
-        return ArrayOfPreformance[x];
-    }
+    private static int idNum = 0;
+    private final ReentrantLock lock = new ReentrantLock(true);
+    int id, y;
 
+    public Client(){
+       id = getID();
+    }
     public static int[] ArrayOfPre(String str) {
         int[] ans = new int[1000];
         double probability;
@@ -60,24 +63,34 @@ public class Client implements Runnable {
             InputStreamReader sr = new InputStreamReader(soc.getInputStream());
             in = new BufferedReader(sr);
             out = new PrintWriter(soc.getOutputStream());
-            int id, y;
-            out.println("id");
-            out.flush();
-            id = Integer.parseInt(in.readLine());
             int i = 0;
-            while (i<10) {
+            while (i < 10) {
                 int x = getX(ArrayOfPreformance);
                 System.out.println("Client<" + id + ">:sending " + x);
                 out.println(x);
                 out.flush();
                 y = Integer.parseInt(in.readLine());
-                System.out.println("Client<" + id + ">:got reply " + y + " for query " + x+"\n");
+                System.out.println("Client<" + id + ">:got reply " + y + " for query " + x + "\n");
                 i++;
             }
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private int getID() {
+        lock.lock();
+        try {
+            return idNum++;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public static int getX(int[] ArrayOfPreformance) {
+        int x = (int) (Math.random() * 1000);
+        return ArrayOfPreformance[x];
     }
 
 }

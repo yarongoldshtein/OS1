@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ public class Server implements Runnable {
     private int y;
     ThreadPool threadPoolOfReaders;
     private int L;
+    ArrayList<SocketController> socArr = new ArrayList<>();
 
     public Server(int namOfThreads, int L) {
         threadPoolOfReaders = new ThreadPool(namOfThreads);
@@ -33,38 +35,15 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        String str;
         try {
             ServSoc = new ServerSocket(4500);
+            new Thread(new SocketManager(socArr)).start();
+
             while (true) {
                 Socket clientSoc = ServSoc.accept();
-                PrintWriter out = new PrintWriter(clientSoc.getOutputStream());
-                InputStreamReader sr = new InputStreamReader(clientSoc.getInputStream());
-                BufferedReader in = new BufferedReader(sr);
-                while ((str = in.readLine()) != null) {
-                    if (str.equals("id")) {
-                        out.println("" + id++);
-                        out.flush();
-                    } else {
-                        int x = Integer.parseInt(str);
-                        ReadDataBase rdb = new ReadDataBase(x, L);
-                        // threadPoolOfReaders.execute(rdb);
-                        rdb.run();
-                        y = rdb.getY();
-                        if (y >= 0) {
-                            UpdateDataBase up = new UpdateDataBase(x, L);
-                            up.run();
-
-                        } else {
-                            WriteDataBase wdb = new WriteDataBase(x, L);
-                            wdb.run();
-                            y = wdb.getY();
-
-                        }
-                        out.println("" + y);
-                        out.flush();
-                    }
-                }
+                SocketController SocCon = new SocketController(clientSoc);
+                socArr.add(SocCon);
+        
             }
         } catch (IOException ex) {
             ex.printStackTrace();
