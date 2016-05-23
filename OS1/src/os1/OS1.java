@@ -26,9 +26,9 @@ public class OS1 {
      */
     public static void main(String[] args) {
         new Thread(new Server(5, 10)).start();
-        new Thread(new Client()).start();
-        new Thread(new Client()).start();
-        new Thread(new Client()).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
 //        File dir = new File("DataBase");
 //        dir.mkdir();
 //        for (int i = 0; i < 5; i++) {

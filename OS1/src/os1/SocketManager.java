@@ -27,22 +27,26 @@ public class SocketManager implements Runnable {
 
     @Override
     public void run() {
-        while (socArr.isEmpty()) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SocketManager.class.getName()).log(Level.SEVERE, null, ex);
+        while (true) {
+            while (socArr.isEmpty()) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(SocketManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }
-        for (int i = 0; i < socArr.size(); i++) {
-            SocCon = socArr.get(i);
-            Thread SocRead = new Thread(new SocketReader(SocCon));
-            SocRead.start();
-            try {
-                SocRead.join(333);
-                if(SocRead.isAlive()) SocRead.interrupt();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SocketManager.class.getName()).log(Level.SEVERE, null, ex);
+            for (int i = 0; i < socArr.size(); i++) {
+                SocCon = socArr.get(i);
+                Thread SocRead = new Thread(new SocketReader(SocCon));
+                SocRead.start();
+                try {
+                    SocRead.join(333);
+                    if (SocRead.isAlive()) {
+                        SocRead.interrupt();
+                    }
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(SocketManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

@@ -43,7 +43,7 @@ public class randomacsses {
 //        }
 
         new Thread(new ReadDataBase(5)).start();
-        new Thread(new WriteDataBase(5)).start();
-        new Thread(new UpdateDataBase(5)).start();
+        new Thread(new WriteDataBase(5,20,1000)).start();
+        new Thread(new UpdateDataBase(5,1000)).start();
     }
 }

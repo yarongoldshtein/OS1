@@ -22,8 +22,6 @@ import java.util.logging.Logger;
 public class Server implements Runnable {
 
     private ServerSocket ServSoc;
-    static int id = 0;
-    private int y;
     ThreadPool threadPoolOfReaders;
     private int L;
     ArrayList<SocketController> socArr = new ArrayList<>();

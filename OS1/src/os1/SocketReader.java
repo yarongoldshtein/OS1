@@ -20,11 +20,13 @@ import java.util.logging.Logger;
  */
 public class SocketReader implements Runnable {
 
-    String str;
+    private String str;
     private PrintWriter out;
     private BufferedReader in;
-    SocketController SocCon;
-    int y;
+    private SocketController SocCon;
+    private int y;
+    private final static int random = (int) (Math.random() * 10000);
+    private final int sizeOfDb = 1000;
 
     public SocketReader(SocketController SocCon) {
         this.SocCon = SocCon;
@@ -38,20 +40,20 @@ public class SocketReader implements Runnable {
             while ((str = in.readLine()) != null) {
                 int x = Integer.parseInt(str);
                 ReadDataBase rdb = new ReadDataBase(x);
-                // threadPoolOfReaders.execute(rdb);
                 rdb.run();
                 y = rdb.getY();
-                if (y >= 0) {
-                    UpdateDataBase up = new UpdateDataBase(x);
+                if (y > 0) {
+                    out.println("" + y);
+                    UpdateDataBase up = new UpdateDataBase(x,sizeOfDb);
                     up.run();
 
                 } else {
-                    WriteDataBase wdb = new WriteDataBase(x);
+                    y = ((random + x) % sizeOfDb) + 1;
+                    out.println("" + y);
+                    WriteDataBase wdb = new WriteDataBase(x,y,sizeOfDb);
                     wdb.run();
-                    y = wdb.getY();
-
                 }
-                out.println("" + y);
+
                 out.flush();
             }
         } catch (IOException ex) {
@@ -59,5 +61,3 @@ public class SocketReader implements Runnable {
         }
     }
 }
-
-

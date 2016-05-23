@@ -20,16 +20,17 @@ public class UpdateDataBase implements Runnable {
 
     private int x;
     private int y;
-    private final static int random = (int) (Math.random() * 10000);
+    private int sizeOfDb;
 
-    public UpdateDataBase(int x) {
+    public UpdateDataBase(int x, int sizeOfDb) {
+        this.sizeOfDb = sizeOfDb;
         this.x = x;
     }
 
     @Override
     public void run() {
         try {
-            int sizeOfDb = 1000;
+        
             File dir = new File("DataBase");
             String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");

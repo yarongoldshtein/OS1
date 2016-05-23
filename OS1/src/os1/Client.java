@@ -21,11 +21,18 @@ public class Client implements Runnable {
 
     private static int idNum = 0;
     private final ReentrantLock lock = new ReentrantLock(true);
-    int id, y;
+    private final int id;
+    private int y;
+    private final int r1, r2;
+    private String file;
 
-    public Client(){
-       id = getID();
+    public Client(int r1, int r2, String fileName) {
+        id = getID();
+        this.r1 = r1;
+        this.r2 = r2;
+        file = fileName;
     }
+
     public static int[] ArrayOfPre(String str) {
         int[] ans = new int[1000];
         double probability;
@@ -48,30 +55,25 @@ public class Client implements Runnable {
         Socket soc;
         BufferedReader in;
         PrintWriter out;
-        int r1 = Integer.parseInt("1");
-        int r2 = Integer.parseInt("4");
-        String file = "ProbabilityFiles\\0.txt";
+        String str;
+
         int[] ArrayOfPreformance = new int[1000];
         FileReader fr;
         try {
             fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            String str;
             str = br.readLine();
             ArrayOfPreformance = ArrayOfPre(str);
             soc = new Socket("127.0.0.1", 4500);
-            InputStreamReader sr = new InputStreamReader(soc.getInputStream());
-            in = new BufferedReader(sr);
+            in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             out = new PrintWriter(soc.getOutputStream());
-            int i = 0;
-            while (i < 10) {
+            while (true) {
                 int x = getX(ArrayOfPreformance);
                 System.out.println("Client<" + id + ">:sending " + x);
                 out.println(x);
                 out.flush();
                 y = Integer.parseInt(in.readLine());
                 System.out.println("Client<" + id + ">:got reply " + y + " for query " + x + "\n");
-                i++;
             }
 
         } catch (IOException ex) {
