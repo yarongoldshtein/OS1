@@ -25,7 +25,13 @@ public class OS1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Thread(new Server(5, 10)).start();
+        new Thread(new Server(5,5)).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();     
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
         new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
         new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
         new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
