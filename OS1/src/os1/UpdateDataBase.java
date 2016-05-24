@@ -21,6 +21,7 @@ public class UpdateDataBase implements Runnable {
     private int x;
     private int y;
     private int sizeOfDb;
+    
 
     public UpdateDataBase(int x, int sizeOfDb) {
         this.sizeOfDb = sizeOfDb;
@@ -45,6 +46,7 @@ public class UpdateDataBase implements Runnable {
             z++;
             raf.seek((x % sizeOfDb) * 8 + 4);
             raf.writeInt(z);
+            
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(UpdateDataBase.class.getName()).log(Level.SEVERE, null, ex);

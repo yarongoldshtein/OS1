@@ -18,18 +18,11 @@ import java.io.IOException;
 public class NewClass {
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        File f;
-        for (int i = 0; i < 1001; i++) {
-            f = new File("ProbabilityFiles/"+i+".txt");
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String str = br.readLine();
-            String [] splits = str.split(",");
-            int t = Integer.parseInt(splits[0]);
-            if(t<=20){
-                System.out.println(i+"t = "+t);
-            }
+       Cache c = new Cache(5, 5);
+        for (int i = 0; i < 5; i++) {
+            cacheNode cn = new cacheNode(i,i, i+10);
+            c.insert(cn);
         }
-                
+          c.upDateCache();
     }
 }

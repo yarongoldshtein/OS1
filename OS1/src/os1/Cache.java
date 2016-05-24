@@ -5,7 +5,10 @@
  */
 package os1;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -25,6 +28,8 @@ public class Cache {
         M = m;
         C = c;
         sizeOfCandidates = c;
+        myCache = new HashMap<>();
+        candidates = new HashMap<>();
     }
 
     //x 2  z 10
@@ -48,9 +53,17 @@ public class Cache {
     }
 
     public void upDateCache() {
+        System.out.println(myCache.toString());
         myCache.putAll(candidates);
-//        myCache.Sort
-//        M = minZ;
-        
+        System.out.println(myCache.toString());
+        cacheNode[] arrOfCn = new cacheNode[myCache.size()];
+        int i = 0;
+        Iterator<Map.Entry<Integer, cacheNode>> it = myCache.entrySet().iterator();
+        while (it.hasNext()) {
+            arrOfCn[i++] = it.next().getValue();
+        }
+        Arrays.toString(arrOfCn);
+        Arrays.sort(arrOfCn);
+        Arrays.toString(arrOfCn);
     }
 }

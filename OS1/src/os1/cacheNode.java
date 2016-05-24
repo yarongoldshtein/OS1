@@ -9,10 +9,9 @@ package os1;
  *
  * @author yaron
  */
-public class cacheNode {
+public class cacheNode implements Comparable<Object>{
 
     private int x;
-
     private int y;
     private int z;
 
@@ -46,26 +45,6 @@ public class cacheNode {
         return z;
     }
 
-    /**
-     * compare 2 cacheNode per their x
-     *
-     * @param other
-     * @return 1 if this.x > other.x ; 0 this.x = other.x ; -1 this.x < other.x
-     *
-     */
-    public int comparePerX(cacheNode other) {
-        int ans = 0;
-        if (this.x > other.getX()) {
-            ans = 1;
-        }
-        if (this.x == other.getX()) {
-            ans = 0;
-        }
-        if (this.x < other.getX()) {
-            ans = -1;
-        }
-        return ans;
-    }
 
     /**
      * compare 2 cacheNode per their z
@@ -74,7 +53,9 @@ public class cacheNode {
      * @return 1 if this.z > other.z ; 0 this.z = other.z ; -1 this.z < other.z
      *
      */
-    public int comparePerZ(cacheNode other) {
+    @Override
+      public int compareTo(Object t) {
+          cacheNode other = (cacheNode)t;
         int ans = 0;
         if (this.z > other.getZ()) {
             ans = 1;
@@ -90,7 +71,7 @@ public class cacheNode {
 
     @Override
     public String toString() {
-        return "{" + "x=" + x + ", y=" + y + ", z=" + z + '}';
+        return "{" + "x=" + x + ", y=" + y + ", z=" + z + "}";
     }
 
     public void setX(int x) {
