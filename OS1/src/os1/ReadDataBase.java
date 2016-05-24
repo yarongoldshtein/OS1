@@ -31,15 +31,21 @@ public class ReadDataBase implements Runnable {
         try {
             File dir = new File("DataBase");
             dir.mkdir();
-            String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            String nameOfFile;
+            if (x >= 0) {
+                nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            } else {
+                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) -1) + ".txt";
+                x *= (-1);
+            }
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8);
             ans = raf.read();
             if (ans >= 0) {
                 raf.seek((x % sizeOfDb) * 8);
                 ans = raf.readInt();
-                if(ans==0){
-                    ans=-1;
+                if (ans == 0) {
+                    ans = -1;
                 }
             }
             this.y = ans;

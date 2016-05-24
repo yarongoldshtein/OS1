@@ -23,7 +23,7 @@ public class Server implements Runnable {
 
     private ServerSocket ServSoc;
     ThreadPool threadPoolOfReaders;
-    private int L;
+    private  int L;
     ArrayList<SocketController> socArr = new ArrayList<>();
 
     public Server(int namOfThreads, int L) {
@@ -35,7 +35,7 @@ public class Server implements Runnable {
     public void run() {
         try {
             ServSoc = new ServerSocket(4500);
-            new Thread(new SocketManager(socArr)).start();
+            new Thread(new SocketManager(socArr,L)).start();
 
             while (true) {
                 Socket clientSoc = ServSoc.accept();

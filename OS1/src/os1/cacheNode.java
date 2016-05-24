@@ -12,6 +12,7 @@ package os1;
 public class cacheNode {
 
     private int x;
+
     private int y;
     private int z;
 
@@ -91,5 +92,16 @@ public class cacheNode {
     public String toString() {
         return "{" + "x=" + x + ", y=" + y + ", z=" + z + '}';
     }
-    
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
+    }
 }

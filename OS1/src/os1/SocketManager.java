@@ -20,9 +20,11 @@ public class SocketManager implements Runnable {
 
     private ArrayList<SocketController> socArr;
     private SocketController SocCon;
+    private final int L;
 
-    public SocketManager(ArrayList<SocketController> socArr) {
+    public SocketManager(ArrayList<SocketController> socArr,int l) {
         this.socArr = socArr;
+        L = l;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class SocketManager implements Runnable {
             }
             for (int i = 0; i < socArr.size(); i++) {
                 SocCon = socArr.get(i);
-                Thread SocRead = new Thread(new SocketReader(SocCon));
+                Thread SocRead = new Thread(new SocketReader(SocCon,L));
                 SocRead.start();
                 try {
                     SocRead.join(333);

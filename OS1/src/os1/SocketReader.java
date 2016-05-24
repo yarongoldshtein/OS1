@@ -27,9 +27,11 @@ public class SocketReader implements Runnable {
     private int y;
     private final static int random = (int) (Math.random() * 10000);
     private final int sizeOfDb = 1000;
+    private final int L;
 
-    public SocketReader(SocketController SocCon) {
+    public SocketReader(SocketController SocCon,int l) {
         this.SocCon = SocCon;
+        L = l;
     }
 
     @Override
@@ -48,12 +50,12 @@ public class SocketReader implements Runnable {
                     up.run();
 
                 } else {
-                    y = ((random + x) % sizeOfDb) + 1;
+                    y = ((random + x) % L) + 1;
                     out.println("" + y);
                     WriteDataBase wdb = new WriteDataBase(x,y,sizeOfDb);
                     wdb.run();
                 }
-
+                
                 out.flush();
             }
         } catch (IOException ex) {

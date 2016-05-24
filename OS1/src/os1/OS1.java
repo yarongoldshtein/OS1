@@ -5,8 +5,10 @@
  */
 package os1;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
@@ -24,17 +26,21 @@ public class OS1 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        new Thread(new Server(5,5)).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();     
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
-        new Thread(new Client(1,4,"ProbabilityFiles\\0.txt")).start();
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        new Thread(new Server(5, 1000)).start();
+        File f;
+        for (int i = 1; i < 1001; i++) {
+            String nameOfFile ="ProbabilityFiles/" + i + ".txt";
+            f = new File(nameOfFile);
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            String str = br.readLine();
+            String[] splits = str.split(",");
+            int r1 = Integer.parseInt(splits[0]);
+            int r2 = Integer.parseInt(splits[1]);
+            new Thread(new Client(r1, r2,nameOfFile)).start();
+            System.err.println(i);
+        }
 //        File dir = new File("DataBase");
 //        dir.mkdir();
 //        for (int i = 0; i < 5; i++) {

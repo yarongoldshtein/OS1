@@ -20,9 +20,10 @@ public class BlockingQueue {
         try {
             this.queue.add(item);
             cond.signalAll();
-        } finally {
+        } finally {         
             lock.unlock();
         }
+
     }
 
     public Object dequeue() throws InterruptedException {

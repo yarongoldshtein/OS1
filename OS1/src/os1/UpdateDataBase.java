@@ -32,14 +32,19 @@ public class UpdateDataBase implements Runnable {
         try {
         
             File dir = new File("DataBase");
-            String nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            String nameOfFile;
+            if (x >= 0) {
+                nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            } else {
+                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) -1) + ".txt";
+                x *= (-1);
+            }
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8 + 4);
             int z = raf.readInt();
             z++;
             raf.seek((x % sizeOfDb) * 8 + 4);
             raf.writeInt(z);
-            System.out.println("z = "+z);
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(UpdateDataBase.class.getName()).log(Level.SEVERE, null, ex);
