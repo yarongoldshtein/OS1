@@ -18,11 +18,11 @@ import java.io.IOException;
 public class NewClass {
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
-       Cache c = new Cache(5, 5);
-        for (int i = 0; i < 5; i++) {
-            cacheNode cn = new cacheNode(i,i, i+10);
+       Cache c = new Cache(0, 5);
+        for (int i = 0; i < 10; i++) {
+            cacheNode cn = new cacheNode(i,i,i);
             c.insert(cn);
         }
-          c.upDateCache();
+//          c.upDateCache();
     }
 }

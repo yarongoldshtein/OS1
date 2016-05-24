@@ -32,7 +32,6 @@ public class Cache {
         candidates = new HashMap<>();
     }
 
-    //x 2  z 10
     public void insert(cacheNode cn) {
 
         lock.lock();
@@ -53,17 +52,19 @@ public class Cache {
     }
 
     public void upDateCache() {
-        System.out.println(myCache.toString());
         myCache.putAll(candidates);
-        System.out.println(myCache.toString());
         cacheNode[] arrOfCn = new cacheNode[myCache.size()];
         int i = 0;
         Iterator<Map.Entry<Integer, cacheNode>> it = myCache.entrySet().iterator();
         while (it.hasNext()) {
             arrOfCn[i++] = it.next().getValue();
         }
-        Arrays.toString(arrOfCn);
         Arrays.sort(arrOfCn);
-        Arrays.toString(arrOfCn);
+        myCache.clear();
+        for (int j = arrOfCn.length-C; j < arrOfCn.length; j++) {
+            myCache.put(arrOfCn[j].getX(), arrOfCn[j]);
+        }
+        candidates.clear();
+        System.out.println(myCache.toString());
     }
 }
