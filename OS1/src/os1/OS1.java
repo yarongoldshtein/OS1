@@ -27,7 +27,7 @@ public class OS1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        new Thread(new Server(5, 1000)).start();
+        new Thread(new Server(5, 1000,0,5)).start();
         File f;
         for (int i = 1; i < 1001; i++) {
             String nameOfFile ="ProbabilityFiles/" + i + ".txt";

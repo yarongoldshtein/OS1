@@ -25,10 +25,12 @@ public class Server implements Runnable {
     ThreadPool threadPoolOfReaders;
     private  int L;
     ArrayList<SocketController> socArr = new ArrayList<>();
+    private Cache cache;
 
-    public Server(int namOfThreads, int L) {
+    public Server(int namOfThreads, int L,int M, int C) {
         threadPoolOfReaders = new ThreadPool(namOfThreads);
         this.L = L;
+        cache = new Cache(M, C);
     }
 
     @Override

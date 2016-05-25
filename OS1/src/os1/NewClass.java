@@ -17,9 +17,12 @@ import java.io.IOException;
  */
 public class NewClass {
     
-    public static void main(String[] args)  {
-       CThread ct = new CThread();
-       ct.getArrayOfReq().add(7);
-        System.out.println(ct.getArrayOfReq().toString());
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+       Cache c = new Cache(0, 5);
+        for (int i = 0; i < 10; i++) {
+            cacheNode cn = new cacheNode(i,i,i);
+            c.insert(cn);
+        }
+//          c.upDateCache();
     }
 }
