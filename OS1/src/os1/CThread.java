@@ -13,28 +13,42 @@ import java.util.logging.Logger;
  *
  * @author Student
  */
-public class CThread implements Runnable {
+public class CThread extends Thread {
 
     private ArrayList<Integer> ArrayOfReq = new ArrayList<Integer>();
     private int y;
     private final ReentrantLock lock = new ReentrantLock(true);
     private Cache cache;
+    private final ReentrantLock lock2 = new ReentrantLock(true);
+    private boolean LockY;
 
+    ;
     public CThread(Cache cache) {
         this.cache = cache;
+        y = 0;
     }
 
     @Override
     public void run() {
-        while (ArrayOfReq.isEmpty()) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
-                System.out.println("CThread can't sleep");
+        while (true) {
+            lock2.lock();
+            while (ArrayOfReq.isEmpty()) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    System.out.println("CThread can't sleep");
+                }
             }
+
+            y = cache.search(ArrayOfReq.get(0));
+            lock2.unlock();
+            while (LockY) {
+
+            }
+            System.out.println("y in the Thread = " + y);
+            ArrayOfReq.remove(0);
+
         }
-       y =cache.search(ArrayOfReq.get(0));
-       ArrayOfReq.remove(0);
     }
 
     public ArrayList<Integer> getArrayOfReq() {
@@ -48,6 +62,12 @@ public class CThread implements Runnable {
     }
 
     public int getY() {
-        return y;
+        lock2.lock();
+        try {
+            return y;
+        } finally {
+            LockY = false;
+            lock2.unlock();
+        }
     }
 }
