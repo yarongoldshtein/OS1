@@ -20,7 +20,7 @@ public class NewClass {
     public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
         Cache c = new Cache(0, 5);
         for (int i = 0; i < 10; i++) {
-            cacheNode cn = new cacheNode(i, i, i);
+            cacheNode cn = new cacheNode(i, i+1, i);
             c.insert(cn);
         }
         CThread ct = new CThread(c);
