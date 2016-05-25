@@ -67,4 +67,12 @@ public class Cache {
         candidates.clear();
         System.out.println(myCache.toString());
     }
+    
+    public int search(int x){
+        if(myCache.containsKey(x)){
+            myCache.get(x).setZ(myCache.get(x).getZ()+1);
+            return myCache.get(x).getY();
+        }
+        return -1;
+    }
 }
