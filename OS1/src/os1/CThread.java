@@ -21,6 +21,7 @@ public class CThread extends Thread {
     private Cache cache;
     private final ReentrantLock lock2 = new ReentrantLock(true);
     private boolean LockY;
+    private boolean ReturnY = true;
 
     ;
     public CThread(Cache cache) {
@@ -30,8 +31,13 @@ public class CThread extends Thread {
 
     @Override
     public void run() {
+        LockY = true;
         while (true) {
             lock2.lock();
+            while (!ReturnY) {
+
+            }
+            LockY = true;
             while (ArrayOfReq.isEmpty()) {
                 try {
                     Thread.sleep(50);
@@ -41,11 +47,9 @@ public class CThread extends Thread {
             }
 
             y = cache.search(ArrayOfReq.get(0));
+            ReturnY = false;
+            LockY = false;
             lock2.unlock();
-            while (LockY) {
-
-            }
-            System.out.println("y in the Thread = " + y);
             ArrayOfReq.remove(0);
 
         }
@@ -63,10 +67,12 @@ public class CThread extends Thread {
 
     public int getY() {
         lock2.lock();
+        while (LockY) {
+        }
         try {
             return y;
         } finally {
-            LockY = false;
+            ReturnY = true;
             lock2.unlock();
         }
     }

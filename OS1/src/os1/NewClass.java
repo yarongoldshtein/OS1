@@ -28,8 +28,9 @@ public class NewClass {
         ct.getArrayOfReq().add(3);
         ct.start();
         ct.getArrayOfReq().add(8);
-        System.out.println("x = " + 7 + "y =" + ct.getY());
-        System.out.println("x = " + 3 + "y =" + ct.getY());
+        
+        System.out.println("x = " + 7 + " y =" + ct.getY()+"\n");
+        System.out.println("x = " + 3 + " y =" + ct.getY()+"\n");
 //          c.upDateCache();
     }
 }
