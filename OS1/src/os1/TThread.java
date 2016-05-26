@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.misc.Queue;
 
 /**
  *
@@ -27,6 +25,9 @@ public class TThread extends Thread {
     private ReentrantLock lock = new ReentrantLock(true);
     private ArrayList<Integer> wasInTheDb = new ArrayList<>();
     private ReentrantLock lock2 = new ReentrantLock(true);
+    boolean runFlag = true;
+    boolean getYFlag = false;
+    private ReentrantLock lock3 = new ReentrantLock(true);
 
     public TThread(int x) {
         lock.lock();
@@ -39,6 +40,19 @@ public class TThread extends Thread {
 
     @Override
     public void run() {
+        lock3.lock();
+        try {
+            while (!runFlag) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            runFlag = false;
+        } finally {
+            lock3.unlock();
+        }
         final int x = Server.ct.getArrayOfReq().get(0);
         boolean updateHash = false;
         boolean foundInTheHash = false;
@@ -62,6 +76,9 @@ public class TThread extends Thread {
                     }
                     InTheHash = true;
                     lock2.unlock();
+                    /////////////////////////////////////WTF??????????////////////
+                    if (waitersToWriteInDb.get(x) == null) System.out.println("WTF");
+                    System.out.println(waitersToWriteInDb.get(x).toString());
                     cacheNode tempNode = new cacheNode(waitersToWriteInDb.get(x));
                     if (tempNode != null) {
                         y = tempNode.getY();
@@ -98,7 +115,7 @@ public class TThread extends Thread {
                     while (it.hasNext()) {
                         rwl.WriteLock();
                         cacheNode enter = new cacheNode(it.next().getValue());
-                        WriteDataBase wdb = new WriteDataBase(enter.getX(), enter.getY(), enter.getZ(), Server.sizeOfDb);
+                        WriteDataBase wdb = new WriteDataBase(enter.getX(), enter.getY(), enter.getZ());
                         new Thread(wdb).start();
                         rwl.writeUnlock();
                     }
@@ -126,5 +143,19 @@ public class TThread extends Thread {
                 wasInTheDb.clear();
             }
         }
+        getYFlag = true;
     }
+
+    public int getY() throws InterruptedException {
+        while (!getYFlag) {
+            Thread.sleep(50);
+        }
+        getYFlag = false;
+        try {
+            return y;
+        } finally {
+            runFlag = true;
+        }
+    }
+
 }

@@ -9,7 +9,7 @@ package os1;
  *
  * @author yaron
  */
-public class cacheNode implements Comparable<Object>{
+public class cacheNode implements Comparable<Object> {
 
     private int x;
     private int y;
@@ -45,7 +45,6 @@ public class cacheNode implements Comparable<Object>{
         return z;
     }
 
-
     /**
      * compare 2 cacheNode per their z
      *
@@ -54,8 +53,8 @@ public class cacheNode implements Comparable<Object>{
      *
      */
     @Override
-      public int compareTo(Object t) {
-          cacheNode other = (cacheNode)t;
+    public int compareTo(Object t) {
+        cacheNode other = (cacheNode) t;
         int ans = 0;
         if (this.z > other.getZ()) {
             ans = 1;

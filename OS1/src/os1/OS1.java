@@ -10,12 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Arrays;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -29,7 +24,7 @@ public class OS1 {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         new Thread(new Server(5, 1000,0,5)).start();
         File f;
-        for (int i = 1; i < 1001; i++) {
+        for (int i = 1; i < 5; i++) {
             String nameOfFile ="ProbabilityFiles/" + i + ".txt";
             f = new File(nameOfFile);
             FileReader fr = new FileReader(f);

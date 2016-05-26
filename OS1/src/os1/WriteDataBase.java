@@ -20,14 +20,12 @@ public class WriteDataBase implements Runnable {
 
     private int x;
     private int y;
-    private int sizeOfDb;
     private int z;
 
-    public WriteDataBase(int x, int y, int z, int sizeOfDb) {
+    public WriteDataBase(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.sizeOfDb = sizeOfDb;
     }
 
     @Override
@@ -35,16 +33,16 @@ public class WriteDataBase implements Runnable {
         File dir = new File("DataBase");
         String nameOfFile;
         if (x >= 0) {
-            nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+            nameOfFile = dir + "\\DataBaseNum" + (x / Server.sizeOfDb) + ".txt";
         } else {
-            nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) - 1) + ".txt";
+            nameOfFile = dir + "\\DataBaseNum" + ((x / Server.sizeOfDb) - 1) + ".txt";
             x *= (-1);
         }
         try {
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
-            raf.seek((x % sizeOfDb) * 8);
+            raf.seek((x % Server.sizeOfDb) * 8);
             raf.writeInt(y);
-            raf.seek((x % sizeOfDb) * 8 + 4);
+            raf.seek((x % Server.sizeOfDb) * 8 + 4);
             raf.writeInt(z);
 
         } catch (FileNotFoundException ex) {

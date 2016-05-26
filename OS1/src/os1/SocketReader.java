@@ -7,10 +7,7 @@ package os1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +25,7 @@ public class SocketReader implements Runnable {
     private final int L;
     private ThreadPool SThread = new ThreadPool(Server.s);
 
-    public SocketReader(SocketController SocCon,int l) {
+    public SocketReader(SocketController SocCon, int l) {
         this.SocCon = SocCon;
         L = l;
     }
@@ -40,22 +37,13 @@ public class SocketReader implements Runnable {
             out = SocCon.getOut();
             while ((str = in.readLine()) != null) {
                 int x = Integer.parseInt(str);
-                
-                ReadDataBase rdb = new ReadDataBase(x);
-                rdb.run();
-                y = rdb.getY();
-                
-                if (y > 0) {
-                    out.println("" + y);
-
-                } else {
-                    out.println("" + y);
-                }
+                TThread T = new TThread(x);
+                new Thread(T).start();
+                y = T.getY();
+                out.println("" + y);
                 out.flush();
             }
-        } catch (IOException ex) {
-            Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
