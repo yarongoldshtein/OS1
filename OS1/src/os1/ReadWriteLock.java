@@ -15,14 +15,13 @@ public class ReadWriteLock {
 
     private int readers = 0;
     private int writers = 0;
-    private final Semaphore Rmutex = new Semaphore(1);
-    private final Semaphore Wmutex = new Semaphore(1);
-    private final Semaphore Mutex2 = new Semaphore(1);
-    private final Semaphore Rdb = new Semaphore(1);
-    private final Semaphore Wdb = new Semaphore(1);
+    private final Semaphore Rmutex = new Semaphore(1,true);
+    private final Semaphore Wmutex = new Semaphore(1,true);
+    private final Semaphore Mutex2 = new Semaphore(1,true);
+    private final Semaphore Rdb = new Semaphore(1,true);
+    private final Semaphore Wdb = new Semaphore(1, true);
 
     public void ReadLock() throws InterruptedException {
-        while (true) {
             Mutex2.acquire();
             Rdb.acquire();
             Rmutex.acquire();
@@ -33,7 +32,7 @@ public class ReadWriteLock {
             Rmutex.release();
             Rdb.release();
             Mutex2.release();
-        }
+        
     }
 
     public void ReadUnlock() throws InterruptedException {
@@ -46,15 +45,14 @@ public class ReadWriteLock {
     }
 
     public void WriteLock() throws InterruptedException {
-        while (true) {
             Wmutex.acquire();
             writers += 1;
             if (writers == 1) {
                 Rdb.acquire();
             }
             Wmutex.release();
-            Wdb.release();
-        }
+            Wdb.acquire();
+        
     }
 
     public void writeUnlock() throws InterruptedException {

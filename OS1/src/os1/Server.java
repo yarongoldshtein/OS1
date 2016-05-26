@@ -22,28 +22,33 @@ import java.util.logging.Logger;
 public class Server implements Runnable {
 
     private ServerSocket ServSoc;
-    ThreadPool threadPoolOfReaders;
-    private  int L;
+    static int L;
     ArrayList<SocketController> socArr = new ArrayList<>();
-    private Cache cache;
+    static Cache cache;
+    static CThread ct;
+    static final int sizeOfDb = 1000;
+    static final int random = (int) (Math.random() * 10000);
+    static  int s;
 
-    public Server(int namOfThreads, int L,int M, int C) {
-        threadPoolOfReaders = new ThreadPool(namOfThreads);
+    public Server(int s, int L, int M, int C) {
         this.L = L;
         cache = new Cache(M, C);
+        ct = new CThread();
+        this.s = s;
     }
 
     @Override
     public void run() {
         try {
             ServSoc = new ServerSocket(4500);
-            new Thread(new SocketManager(socArr,L)).start();
+            new Thread(new SocketManager(socArr, L)).start();
+            new Thread(Server.ct).start();
 
             while (true) {
                 Socket clientSoc = ServSoc.accept();
                 SocketController SocCon = new SocketController(clientSoc);
                 socArr.add(SocCon);
-        
+
             }
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -19,33 +19,33 @@ public class CThread extends Thread {
     private int y;
     private final ReentrantLock lock = new ReentrantLock(true);
     private Cache cache;
-    boolean Yflag = false;
-    boolean Rflag = true;
-//    private final ReentrantLock lock2 = new ReentrantLock(true);
-//    private final ReentrantLock lock3 = new ReentrantLock(true);
+    boolean runFlag = true;
+    boolean getYFlag = false;
+    private final ReentrantLock lock2 = new ReentrantLock(true);
 
     ;
-    public CThread(Cache cache) {
-        this.cache = cache;
+    public CThread() {
+        this.cache = Server.cache;
         y = 0;
     }
 
     @Override
     public void run() {
-//        lock3.lock();
         while (true) {
-//            lock2.lock();
-            while (!Rflag) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(CThread.class.getName()).log(Level.SEVERE, null, ex);
+            lock2.lock();
+            try {
+                while (!runFlag) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(CThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
+                runFlag = false;
+            } finally {
+                lock2.unlock();
             }
-            Rflag = false;
-
-//                try {
             while (ArrayOfReq.isEmpty()) {
                 try {
                     Thread.sleep(50);
@@ -54,12 +54,10 @@ public class CThread extends Thread {
                 }
             }
             y = cache.search(ArrayOfReq.get(0));
-//                } finally {
-//                lock3.unlock();
-//                }
+
             ArrayOfReq.remove(0);
 
-            Yflag = true;
+            getYFlag = true;
         }
     }
 
@@ -74,20 +72,14 @@ public class CThread extends Thread {
     }
 
     public int getY() throws InterruptedException {
-//        lock3.lock();
-//        try {
-        while (!Yflag) {
+        while (!getYFlag) {
             Thread.sleep(50);
-
         }
-        Yflag = false;
+        getYFlag = false;
         try {
             return y;
         } finally {
-            Rflag = true;
+            runFlag = true;
         }
-//        } finally {
-//            lock2.unlock();
-//        }
     }
 }

@@ -25,9 +25,8 @@ public class SocketReader implements Runnable {
     private BufferedReader in;
     private SocketController SocCon;
     private int y;
-    private final static int random = (int) (Math.random() * 10000);
-    private final int sizeOfDb = 1000;
     private final int L;
+    private ThreadPool SThread = new ThreadPool(Server.s);
 
     public SocketReader(SocketController SocCon,int l) {
         this.SocCon = SocCon;
@@ -41,24 +40,22 @@ public class SocketReader implements Runnable {
             out = SocCon.getOut();
             while ((str = in.readLine()) != null) {
                 int x = Integer.parseInt(str);
+                
                 ReadDataBase rdb = new ReadDataBase(x);
                 rdb.run();
                 y = rdb.getY();
+                
                 if (y > 0) {
                     out.println("" + y);
-                    UpdateDataBase up = new UpdateDataBase(x,sizeOfDb);
-                    up.run();
 
                 } else {
-                    y = ((random + x) % L) + 1;
                     out.println("" + y);
-                    WriteDataBase wdb = new WriteDataBase(x,y,sizeOfDb);
-                    wdb.run();
                 }
-                
                 out.flush();
             }
         } catch (IOException ex) {
+            Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

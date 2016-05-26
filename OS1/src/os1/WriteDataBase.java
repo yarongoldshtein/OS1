@@ -21,10 +21,12 @@ public class WriteDataBase implements Runnable {
     private int x;
     private int y;
     private int sizeOfDb;
+    private int z;
 
-    public WriteDataBase(int x,int y,int sizeOfDb) {
+    public WriteDataBase(int x, int y, int z, int sizeOfDb) {
         this.x = x;
         this.y = y;
+        this.z = z;
         this.sizeOfDb = sizeOfDb;
     }
 
@@ -32,18 +34,18 @@ public class WriteDataBase implements Runnable {
     public void run() {
         File dir = new File("DataBase");
         String nameOfFile;
-            if (x >= 0) {
-                nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
-            } else {
-                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) -1) + ".txt";
-                x *= (-1);
-            }
+        if (x >= 0) {
+            nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+        } else {
+            nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) - 1) + ".txt";
+            x *= (-1);
+        }
         try {
-            RandomAccessFile raf= new RandomAccessFile(nameOfFile, "rw");
+            RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8);
             raf.writeInt(y);
             raf.seek((x % sizeOfDb) * 8 + 4);
-            raf.writeInt(1);
+            raf.writeInt(z);
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,9 +53,5 @@ public class WriteDataBase implements Runnable {
             Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    public int getY() {
-        return y;
     }
 }

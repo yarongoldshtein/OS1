@@ -20,11 +20,9 @@ public class UpdateDataBase implements Runnable {
 
     private int x;
     private int y;
-    private int sizeOfDb;
     
 
-    public UpdateDataBase(int x, int sizeOfDb) {
-        this.sizeOfDb = sizeOfDb;
+    public UpdateDataBase(int x) {  
         this.x = x;
     }
 
@@ -35,16 +33,16 @@ public class UpdateDataBase implements Runnable {
             File dir = new File("DataBase");
             String nameOfFile;
             if (x >= 0) {
-                nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+                nameOfFile = dir + "\\DataBaseNum" + (x / Server.sizeOfDb) + ".txt";
             } else {
-                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) -1) + ".txt";
+                nameOfFile = dir + "\\DataBaseNum" + ((x / Server.sizeOfDb) -1) + ".txt";
                 x *= (-1);
             }
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
-            raf.seek((x % sizeOfDb) * 8 + 4);
+            raf.seek((x % Server.sizeOfDb) * 8 + 4);
             int z = raf.readInt();
             z++;
-            raf.seek((x % sizeOfDb) * 8 + 4);
+            raf.seek((x % Server.sizeOfDb) * 8 + 4);
             raf.writeInt(z);
             
 

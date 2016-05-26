@@ -34,10 +34,9 @@ public class Cache {
         try {
             cacheNode node = candidates.get(cn.getX());
             if (node != null) {
-                cn.setZ(node.getZ() + 1);
+                node.setZ(node.getZ() + 1);
             } else {
                 candidates.put(cn.getX(), cn);
-                cn.setZ(cn.getZ() + 1);
                 if (candidates.size() == sizeOfCandidates) {
                     upDateCache();
                 }
@@ -47,7 +46,7 @@ public class Cache {
         }
     }
 
-    public void upDateCache() {
+    private void upDateCache() {
         myCache.putAll(candidates);
         cacheNode[] arrOfCn = new cacheNode[myCache.size()];
         int i = 0;
@@ -65,10 +64,12 @@ public class Cache {
     }
     
     public int search(int x){
+        
         if(myCache.containsKey(x)){
             myCache.get(x).setZ(myCache.get(x).getZ()+1);
             return myCache.get(x).getY();
         }
         return -1;
     }
+    
 }

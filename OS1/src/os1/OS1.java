@@ -41,31 +41,6 @@ public class OS1 {
             new Thread(new Client(r1, r2,nameOfFile)).start();
             System.err.println(i);
         }
-//        File dir = new File("DataBase");
-//        dir.mkdir();
-//        for (int i = 0; i < 5; i++) {
-//            String nameOfFile = dir + "\\testNum" + i + ".txt";
-//            try {
-//                RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
-//                raf.seek(i * 4);
-//                raf.writeInt(i+2550000);
-//                raf.seek(i * 4 + 4);
-//                raf.writeInt(i+2560000);
-//                raf.seek(i*4);
-//                System.out.println("" + raf.readInt() + " , "+raf.readInt());
-//            } catch (FileNotFoundException ex) {
-//                Logger.getLogger(OS1.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (IOException ex) {
-//                Logger.getLogger(OS1.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        cacheNode[] arr = new cacheNode[5];
-//        for (int i = 0; i < 5; i++) {
-//            arr[i] = new cacheNode(i, i + 1,10-i);
-//        }
-//        System.out.println(Arrays.toString(arr));
-//         MinHeap mh = new MinHeap(arr);
-//         mh.buildMinHeap();
-//         mh.print();
+
     }
 }

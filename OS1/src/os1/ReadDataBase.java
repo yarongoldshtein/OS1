@@ -8,7 +8,7 @@ package os1;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.concurrent.Callable;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +20,9 @@ public class ReadDataBase implements Runnable {
 
     private int x;
     private int y;
+    private boolean runFlag = true;
+    private boolean getYFlag = false;
+    private final ReentrantLock lock = new ReentrantLock(true);
 
     public ReadDataBase(int x) {
         this.x = x;
@@ -28,34 +31,57 @@ public class ReadDataBase implements Runnable {
     @Override
     public void run() {
         int ans, sizeOfDb = 1000;
+        lock.lock();
         try {
+            try {
+                while (!runFlag) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(CThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                runFlag = false;
+            } finally {
+                lock.unlock();
+            }
+
             File dir = new File("DataBase");
             dir.mkdir();
             String nameOfFile;
             if (x >= 0) {
                 nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
             } else {
-                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) -1) + ".txt";
+                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) - 1) + ".txt";
                 x *= (-1);
             }
+            lock.lock();
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
             raf.seek((x % sizeOfDb) * 8);
             ans = raf.read();
-            if (ans >= 0) {
+            if (ans > 0) {
                 raf.seek((x % sizeOfDb) * 8);
                 ans = raf.readInt();
-                if (ans == 0) {
-                    ans = -1;
-                }
+            } else if (ans == 0) {
+                ans = -1;
             }
             this.y = ans;
+            getYFlag = true;
         } catch (IOException ex) {
             Logger.getLogger(ReadDataBase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public int getY() {
-        return y;
+    public int getY() throws InterruptedException {
+        while (!getYFlag) {
+            Thread.sleep(50);
+        }
+        getYFlag = false;
+        try {
+            return y;
+        } finally {
+            runFlag = true;
+        }
     }
 
 }
