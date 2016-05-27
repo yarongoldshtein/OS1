@@ -18,18 +18,17 @@ import java.util.logging.Logger;
  */
 public class WriteDataBase implements Runnable {
 
-    private int x;
     private int y;
     private int z;
 
-    public WriteDataBase(int x, int y, int z) {
-        this.x = x;
+    public WriteDataBase(int y, int z) {
         this.y = y;
         this.z = z;
     }
 
     @Override
     public void run() {
+        int x = SocketReader.x;
         File dir = new File("DataBase");
         String nameOfFile;
         if (x >= 0) {

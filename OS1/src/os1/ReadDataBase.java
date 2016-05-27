@@ -18,19 +18,15 @@ import java.util.logging.Logger;
  */
 public class ReadDataBase implements Runnable {
 
-    private int x;
     private int y;
     private boolean runFlag = true;
     private boolean getYFlag = false;
     private final ReentrantLock lock = new ReentrantLock(true);
 
-    public ReadDataBase(int x) {
-        this.x = x;
-    }
-
     @Override
     public void run() {
-        int ans, sizeOfDb = 1000;
+        int ans;
+        int x = SocketReader.x;
         lock.lock();
         try {
             try {
@@ -50,22 +46,23 @@ public class ReadDataBase implements Runnable {
             dir.mkdir();
             String nameOfFile;
             if (x >= 0) {
-                nameOfFile = dir + "\\DataBaseNum" + (x / sizeOfDb) + ".txt";
+                nameOfFile = dir + "\\DataBaseNum" + (x / Server.sizeOfDb) + ".txt";
             } else {
-                nameOfFile = dir + "\\DataBaseNum" + ((x / sizeOfDb) - 1) + ".txt";
+                nameOfFile = dir + "\\DataBaseNum" + ((x / Server.sizeOfDb) - 1) + ".txt";
                 x *= (-1);
             }
             lock.lock();
             RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
-            raf.seek((x % sizeOfDb) * 8);
+            raf.seek((x % Server.sizeOfDb) * 8);
             ans = raf.read();
-            if (ans > 0) {
-                raf.seek((x % sizeOfDb) * 8);
+            if (ans >= 0) {
+                raf.seek((x % Server.sizeOfDb) * 8);
                 ans = raf.readInt();
             } else if (ans == 0) {
                 ans = -1;
             }
             this.y = ans;
+
             getYFlag = true;
         } catch (IOException ex) {
             Logger.getLogger(ReadDataBase.class.getName()).log(Level.SEVERE, null, ex);

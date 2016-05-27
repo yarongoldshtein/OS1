@@ -28,9 +28,15 @@ public class cacheNode implements Comparable<Object> {
     }
 
     public cacheNode(cacheNode other) {
-        this.x = other.x;
-        this.y = other.y;
-        this.z = other.z;
+        if (other != null) {
+            this.x = other.x;
+            this.y = other.y;
+            this.z = other.z;
+        }else{
+            this.x = 0;
+            this.y = -1;
+            this.z = -1;
+        }
     }
 
     public int getX() {

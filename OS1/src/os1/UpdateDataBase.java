@@ -18,18 +18,15 @@ import java.util.logging.Logger;
  */
 public class UpdateDataBase implements Runnable {
 
-    private int x;
     private int y;
     
 
-    public UpdateDataBase(int x) {  
-        this.x = x;
-    }
+ 
 
     @Override
     public void run() {
         try {
-        
+        int x = SocketReader.x;
             File dir = new File("DataBase");
             String nameOfFile;
             if (x >= 0) {

@@ -22,7 +22,7 @@ public class SocketManager implements Runnable {
     private SocketController SocCon;
     private final int L;
 
-    public SocketManager(ArrayList<SocketController> socArr,int l) {
+    public SocketManager(ArrayList<SocketController> socArr, int l) {
         this.socArr = socArr;
         L = l;
     }
@@ -39,10 +39,10 @@ public class SocketManager implements Runnable {
             }
             for (int i = 0; i < socArr.size(); i++) {
                 SocCon = socArr.get(i);
-                Thread SocRead = new Thread(new SocketReader(SocCon,L));
+                Thread SocRead = new Thread(new SocketReader(SocCon, L));
                 SocRead.start();
                 try {
-                    SocRead.join(333);
+                    SocRead.join(666);
                     if (SocRead.isAlive()) {
                         SocRead.interrupt();
                     }

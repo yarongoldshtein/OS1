@@ -21,13 +21,15 @@ public class TThread extends Thread {
 
     private int y;
     private ReadWriteLock rwl = new ReadWriteLock();
-    private HashMap<Integer, cacheNode> waitersToWriteInDb = new HashMap<>();
+    static HashMap<Integer, cacheNode> waitersToWriteInDb = new HashMap<>();
     private ReentrantLock lock = new ReentrantLock(true);
     private ArrayList<Integer> wasInTheDb = new ArrayList<>();
     private ReentrantLock lock2 = new ReentrantLock(true);
     boolean runFlag = true;
     boolean getYFlag = false;
     private ReentrantLock lock3 = new ReentrantLock(true);
+    static int lo = 1;
+    static int i = 0;
 
     public TThread(int x) {
         lock.lock();
@@ -53,6 +55,13 @@ public class TThread extends Thread {
         } finally {
             lock3.unlock();
         }
+        while (Server.ct.getArrayOfReq().isEmpty()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         final int x = Server.ct.getArrayOfReq().get(0);
         boolean updateHash = false;
         boolean foundInTheHash = false;
@@ -60,15 +69,18 @@ public class TThread extends Thread {
 
         try {
             y = Server.ct.getY();
+            System.err.println("cash: " + x +" "+ y);
         } catch (InterruptedException ex) {
             Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (y == -1) {
             try {
                 rwl.ReadLock();
-                ReadDataBase rdb = new ReadDataBase(x);
+                ReadDataBase rdb = new ReadDataBase();
                 new Thread(rdb).start();
+                
                 y = rdb.getY();
+                System.err.println("rand: " + x +" "+ y);
                 if (y == -1) {
                     lock2.lock();
                     while (InTheHash) {
@@ -76,12 +88,10 @@ public class TThread extends Thread {
                     }
                     InTheHash = true;
                     lock2.unlock();
-                    /////////////////////////////////////WTF??????????////////////
-                    if (waitersToWriteInDb.get(x) == null) System.out.println("WTF");
-                    System.out.println(waitersToWriteInDb.get(x).toString());
                     cacheNode tempNode = new cacheNode(waitersToWriteInDb.get(x));
-                    if (tempNode != null) {
+                    if (tempNode.getZ() != -1) {
                         y = tempNode.getY();
+                        System.err.println("hash: " + x+" " + y);
                         updateHash = true;
                         foundInTheHash = true;
                     }
@@ -107,15 +117,16 @@ public class TThread extends Thread {
         if (y == -1) {//dont found in the Database דחיפת דברים לתוך האשמפ
             try {
 
-                y = ((Server.random + x) % Server.L) + 1;
+                y = (((Server.random + x) % Server.L) + 1);
+                System.err.println("new: " + x+" " + y);
                 cacheNode cn = new cacheNode(x, y, 1);
                 waitersToWriteInDb.put(x, cn);
-                if (waitersToWriteInDb.size() == 50) {
+                if (waitersToWriteInDb.size() >= 3) {
                     Iterator<Map.Entry<Integer, cacheNode>> it = waitersToWriteInDb.entrySet().iterator();
                     while (it.hasNext()) {
                         rwl.WriteLock();
                         cacheNode enter = new cacheNode(it.next().getValue());
-                        WriteDataBase wdb = new WriteDataBase(enter.getX(), enter.getY(), enter.getZ());
+                        WriteDataBase wdb = new WriteDataBase(enter.getY(), enter.getZ());
                         new Thread(wdb).start();
                         rwl.writeUnlock();
                     }
@@ -133,7 +144,7 @@ public class TThread extends Thread {
                 for (int i = 0; i < wasInTheDb.size(); i++) {
                     try {
                         rwl.WriteLock();
-                        UpdateDataBase up = new UpdateDataBase(x);
+                        UpdateDataBase up = new UpdateDataBase();
                         new Thread(up).start();
                         rwl.writeUnlock();
                     } catch (InterruptedException ex) {
@@ -146,9 +157,14 @@ public class TThread extends Thread {
         getYFlag = true;
     }
 
-    public int getY() throws InterruptedException {
+    public int getY() {
         while (!getYFlag) {
-            Thread.sleep(50);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
+                System.err.println("interrupt: " + (lo++));
+
+            }
         }
         getYFlag = false;
         try {

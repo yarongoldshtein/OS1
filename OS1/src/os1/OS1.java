@@ -11,21 +11,23 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 /**
  *
  * @author אליצור
  */
 public class OS1 {
 
+    static int numO = 0;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        new Thread(new Server(5, 1000,0,5)).start();
+
+        new Thread(new Server(1, 10, 0, 5)).start();
         File f;
         for (int i = 1; i < 5; i++) {
-            String nameOfFile ="ProbabilityFiles/" + i + ".txt";
+            String nameOfFile = "ProbabilityFiles/" + 0 + ".txt";
             f = new File(nameOfFile);
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
@@ -33,8 +35,7 @@ public class OS1 {
             String[] splits = str.split(",");
             int r1 = Integer.parseInt(splits[0]);
             int r2 = Integer.parseInt(splits[1]);
-            new Thread(new Client(r1, r2,nameOfFile)).start();
-            System.err.println(i);
+            new Thread(new Client(r1, r2, nameOfFile)).start();
         }
 
     }
