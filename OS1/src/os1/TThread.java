@@ -21,7 +21,7 @@ public class TThread extends Thread {
     private int x;
     private cacheNode cn;
     private boolean found = true;
-    private ReadWriteLock rwl = new ReadWriteLock();
+    private ReadWriteLockByNumber rwl = new ReadWriteLockByNumber();
     private ReentrantLock lock = new ReentrantLock(true);
     static ArrayList<Integer> wasInTheDb = new ArrayList<>();
 
@@ -58,13 +58,13 @@ public class TThread extends Thread {
 
         if (y == -1) {
             try {
-                rwl.ReadLock();
+                rwl.ReadLock(x);
                 ReadDataBase rdb = new ReadDataBase(x);
                 Thread read = new Thread(rdb);
                 Server.ReadersThreadPool.execute(read);
                 cn = rdb.getNode();
                 y = cn.getY();
-                rwl.ReadUnlock();
+                rwl.ReadUnlock(x);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -88,11 +88,10 @@ public class TThread extends Thread {
             out.flush();
         }
         try {
-            rwl.WriteLock();
-
+            rwl.WriteLock(x);
             WriteDataBase wdb = new WriteDataBase(x, cn, found);
             new Thread(wdb).start();
-            rwl.writeUnlock();
+            rwl.writeUnlock(x);
 
         } catch (InterruptedException ex) {
             Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);

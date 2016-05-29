@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  */
 public class WriteDataBase implements Runnable {
 
-
     private cacheNode cn;
     private String nameOfFile;
     private int x;
@@ -49,13 +48,15 @@ public class WriteDataBase implements Runnable {
 
             if (!found) {
                 Server.waitersToWriteInDb.put(x, cn);
-
                 if (Server.waitersToWriteInDb.size() >= 3) {
                     Iterator<Map.Entry<Integer, cacheNode>> it = Server.waitersToWriteInDb.entrySet().iterator();
                     while (it.hasNext()) {
                         cacheNode enter = new cacheNode(it.next().getValue());
                         try {
                             write(enter);
+                            if (enter.getZ() >= Server.cache.getM()) {///////////////////////////<=  הוספתי את התנאי הזה
+                                Server.cache.insert(enter);
+                            }
                         } catch (IOException ex) {
                             Logger.getLogger(WriteDataBase.class
                                     .getName()).log(Level.SEVERE, null, ex);
@@ -75,11 +76,8 @@ public class WriteDataBase implements Runnable {
                         }
                         TThread.wasInTheDb.clear();
                     }
-                } else {
-               
-                    if (Server.waitersToWriteInDb.containsKey(x)) {
-                        Server.waitersToWriteInDb.get(x).setZ(Server.waitersToWriteInDb.get(x).getZ() + 1);
-                    }
+                } else if (Server.waitersToWriteInDb.containsKey(x)) {
+                    Server.waitersToWriteInDb.get(x).setZ(Server.waitersToWriteInDb.get(x).getZ() + 1);
                 }
             }
         } catch (IOException ex) {

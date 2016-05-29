@@ -40,7 +40,6 @@ public class CThread extends Thread {
                         Logger.getLogger(CThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
                 runFlag = false;
             } finally {
                 lock2.unlock();
@@ -53,9 +52,7 @@ public class CThread extends Thread {
                 }
             }
             y = cache.search(ArrayOfReq.get(0));
-
             ArrayOfReq.remove(0);
-
             getYFlag = true;
         }
     }
