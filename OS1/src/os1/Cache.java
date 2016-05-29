@@ -13,8 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Cache {
 
-    private HashMap<Integer, cacheNode> myCache;
-    private HashMap<Integer, cacheNode> candidates;
+    private SyncHashMap<Integer, cacheNode> myCache;
+    private SyncHashMap<Integer, cacheNode> candidates;
     private int M;
     private final int C;
     private final int sizeOfCandidates;
@@ -24,8 +24,8 @@ public class Cache {
         M = m;
         C = c;
         sizeOfCandidates = c;
-        myCache = new HashMap<>();
-        candidates = new HashMap<>();
+        myCache = new SyncHashMap<>();
+        candidates = new SyncHashMap<>();
     }
 
     public void insert(cacheNode cn) {
@@ -47,7 +47,7 @@ public class Cache {
     }
 
     private void upDateCache() {
-        myCache.putAll(candidates);
+        myCache.putAll((Map<? extends Integer, ? extends cacheNode>) candidates);
         cacheNode[] arrOfCn = new cacheNode[myCache.size()];
         int i = 0;
         Iterator<Map.Entry<Integer, cacheNode>> it = myCache.entrySet().iterator();

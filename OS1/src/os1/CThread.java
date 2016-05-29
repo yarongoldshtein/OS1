@@ -23,7 +23,6 @@ public class CThread extends Thread {
     boolean getYFlag = false;
     private final ReentrantLock lock2 = new ReentrantLock(true);
 
-    ;
     public CThread() {
         this.cache = Server.cache;
         y = 0;

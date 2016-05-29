@@ -32,8 +32,9 @@ public class NewClass {
 //        System.out.println("x = " + 7 + " y =" + ct.getY() + "\n");
 //        System.out.println("x = " + 3 + " y =" + ct.getY() + "\n");
 //        System.out.println("x = " + 8 + " y =" + ct.getY() + "\n");
-        cacheNode t = new cacheNode(null);
-        System.out.println(t.toString());
+//        cacheNode t = new cacheNode(null);
+//        System.out.println(t.toString());
+      
     }
 
 }

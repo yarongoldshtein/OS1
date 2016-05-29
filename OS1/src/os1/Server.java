@@ -18,24 +18,29 @@ import java.util.logging.Logger;
  */
 public class Server implements Runnable {
 
+    static SyncHashMap<Integer, cacheNode> waitersToWriteInDb = new SyncHashMap<>();
     private ServerSocket ServSoc;
-    static int L;
-    ArrayList<SocketController> socArr = new ArrayList<>();
+    private ArrayList<SocketController> socArr = new ArrayList<>();//private?
     static Cache cache;
     static CThread ct;
     static final int sizeOfDb = 1000;
     static final int random = (int) (Math.random() * 10000);
-    static  int s;
+    static int L;
+    static ThreadPool SearchThreadPool;
+    static ThreadPool ReadersThreadPool;
 
-    public Server(int s, int L, int M, int C) {
+    public Server(int S, int L, int M, int C, int Y) {
         this.L = L;
         cache = new Cache(M, C);
         ct = new CThread();
-        this.s = s;
+        SearchThreadPool = new ThreadPool(S);
+        ReadersThreadPool = new ThreadPool(Y);
     }
 
     @Override
     public void run() {
+        Thread.currentThread().setName("Server");
+
         try {
             ServSoc = new ServerSocket(4500);
             new Thread(new SocketManager(socArr, L)).start();
@@ -45,11 +50,8 @@ public class Server implements Runnable {
                 Socket clientSoc = ServSoc.accept();
                 SocketController SocCon = new SocketController(clientSoc);
                 socArr.add(SocCon);
-
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (Exception ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

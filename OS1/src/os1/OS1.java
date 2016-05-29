@@ -17,16 +17,21 @@ import java.io.IOException;
  */
 public class OS1 {
 
-    static int numO = 0;
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
+        File dir = new File("DataBase");
+        final File[] dbs = dir.listFiles();
+        if (dir.exists()) {
+            for (File file : dbs) {
+                file.delete();
+            }
+        }
 
-        new Thread(new Server(1, 10, 0, 5)).start();
+        new Thread(new Server(1, 1000, 2, 5, 5)).start();
         File f;
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i <= 10; i++) {
             String nameOfFile = "ProbabilityFiles/" + 0 + ".txt";
             f = new File(nameOfFile);
             FileReader fr = new FileReader(f);

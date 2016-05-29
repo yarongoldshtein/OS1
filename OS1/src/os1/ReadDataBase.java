@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class ReadDataBase implements Runnable {
 
-    private int y;
+    private cacheNode cn = new cacheNode();
     private boolean runFlag = true;
     private boolean getYFlag = false;
     private final ReentrantLock lock = new ReentrantLock(true);
@@ -27,6 +27,7 @@ public class ReadDataBase implements Runnable {
     public void run() {
         int ans;
         int x = SocketReader.x;
+        //cn.setX(x);
         lock.lock();
         try {
             try {
@@ -58,10 +59,25 @@ public class ReadDataBase implements Runnable {
             if (ans >= 0) {
                 raf.seek((x % Server.sizeOfDb) * 8);
                 ans = raf.readInt();
-            } else if (ans == 0) {
+                raf.seek((x % Server.sizeOfDb) * 8 + 4);
+                cn.setZ(raf.readInt());
+            }
+            if (ans == 0) {
                 ans = -1;
             }
-            this.y = ans;
+
+            this.cn.setY(ans);
+            System.err.println("rand = " + x + " " + cn.getY());
+
+            if (cn.getY() == -1) {
+                cacheNode tempNode = new cacheNode(Server.waitersToWriteInDb.get(x));
+                if (tempNode.getZ() != -1) {
+                    this.cn.setY(tempNode.getY());
+                    this.cn.setZ(tempNode.getZ());
+                    System.err.println("hash = " + x + " " + cn.getY());
+
+                }
+            }
 
             getYFlag = true;
         } catch (IOException ex) {
@@ -69,13 +85,13 @@ public class ReadDataBase implements Runnable {
         }
     }
 
-    public int getY() throws InterruptedException {
+    public cacheNode getNode() throws InterruptedException {
         while (!getYFlag) {
             Thread.sleep(50);
         }
         getYFlag = false;
         try {
-            return y;
+            return cn;
         } finally {
             runFlag = true;
         }

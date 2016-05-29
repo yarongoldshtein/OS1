@@ -25,9 +25,7 @@ public class SocketReader implements Runnable {
     private int y;
     static int x;
     private final int L;
-    private ThreadPool SThread = new ThreadPool(Server.s);
-        private final ReentrantLock lock = new ReentrantLock(true);
-
+    private final ReentrantLock lock = new ReentrantLock(true);
 
     public SocketReader(SocketController SocCon, int l) {
         this.SocCon = SocCon;
@@ -42,16 +40,15 @@ public class SocketReader implements Runnable {
             while ((str = in.readLine()) != null) {
                 lock.lock();
                 x = Integer.parseInt(str);
-                OS1.numO++;
-                TThread T = new TThread(x);
-                new Thread(T).start();
-                y = T.getY();
-                out.println("" + y);
-                out.flush();
-                System.err.println("numO = "+OS1.numO);
+
+                Thread T =  new Thread (new TThread(out,x));
+                Server.SearchThreadPool.execute(T);
+
                 lock.unlock();
             }
         } catch (IOException ex) {
+            Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(SocketReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -23,7 +23,7 @@ public class PoolThread extends Thread {
                 Runnable runnable = (Runnable) taskQueue.dequeue();
                 runnable.run();
             } catch (InterruptedException e) {
-
+                System.out.println("PoolThread crashed");
             }
         }
     }
