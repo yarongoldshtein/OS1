@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class TThread extends Thread {
 
     private int y;
+    private int x;
     private cacheNode cn;
     private boolean found = true;
     private ReadWriteLock rwl = new ReadWriteLock();
@@ -46,7 +47,7 @@ public class TThread extends Thread {
                 Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        final int x = Server.ct.getArrayOfReq().get(0);
+        x = Server.ct.getArrayOfReq().get(0);
         cn.setX(x);
 
         try {
@@ -58,7 +59,7 @@ public class TThread extends Thread {
         if (y == -1) {
             try {
                 rwl.ReadLock();
-                ReadDataBase rdb = new ReadDataBase();
+                ReadDataBase rdb = new ReadDataBase(x);
                 Thread read = new Thread(rdb);
                 Server.ReadersThreadPool.execute(read);
                 cn = rdb.getNode();
@@ -74,19 +75,22 @@ public class TThread extends Thread {
 
         if (y == -1) {
             y = (((Server.random + x) % Server.L) + 1);
+            System.err.println("new = " + x + " " + y);
+
             cn.setY(y);
             cn.setZ(1);
             found = false;
             out.println("" + y);
             out.flush();
-            System.err.println("new = " + x + " " + cn.getY());
 
+        } else {
+            out.println("" + y);
+            out.flush();
         }
         try {
             rwl.WriteLock();
-            System.err.println("cn.getX() = " + cn.getX() + "  x = " + x);
-            
-            WriteDataBase wdb = new WriteDataBase(x,cn, found);
+
+            WriteDataBase wdb = new WriteDataBase(x, cn, found);
             new Thread(wdb).start();
             rwl.writeUnlock();
 

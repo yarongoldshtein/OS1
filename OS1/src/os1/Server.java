@@ -20,7 +20,7 @@ public class Server implements Runnable {
 
     static SyncHashMap<Integer, cacheNode> waitersToWriteInDb = new SyncHashMap<>();
     private ServerSocket ServSoc;
-    private ArrayList<SocketController> socArr = new ArrayList<>();//private?
+    private ArrayList<SocketController> socArr = new ArrayList<>();
     static Cache cache;
     static CThread ct;
     static final int sizeOfDb = 1000;

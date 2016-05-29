@@ -19,15 +19,19 @@ import java.util.logging.Logger;
 public class ReadDataBase implements Runnable {
 
     private cacheNode cn = new cacheNode();
+    private int x;
     private boolean runFlag = true;
     private boolean getYFlag = false;
     private final ReentrantLock lock = new ReentrantLock(true);
 
+    public ReadDataBase(int x) {
+        this.x = x;
+        cn.setX(x);
+    }
+
     @Override
     public void run() {
         int ans;
-        int x = SocketReader.x;
-        //cn.setX(x);
         lock.lock();
         try {
             try {
@@ -62,13 +66,12 @@ public class ReadDataBase implements Runnable {
                 raf.seek((x % Server.sizeOfDb) * 8 + 4);
                 cn.setZ(raf.readInt());
             }
+
             if (ans == 0) {
                 ans = -1;
             }
-
             this.cn.setY(ans);
             System.err.println("rand = " + x + " " + cn.getY());
-
             if (cn.getY() == -1) {
                 cacheNode tempNode = new cacheNode(Server.waitersToWriteInDb.get(x));
                 if (tempNode.getZ() != -1) {

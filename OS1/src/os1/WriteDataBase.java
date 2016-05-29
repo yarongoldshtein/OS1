@@ -20,8 +20,7 @@ import java.util.logging.Logger;
  */
 public class WriteDataBase implements Runnable {
 
-//    private int y;
-//    private int z;
+
     private cacheNode cn;
     private String nameOfFile;
     private int x;
@@ -50,7 +49,6 @@ public class WriteDataBase implements Runnable {
 
             if (!found) {
                 Server.waitersToWriteInDb.put(x, cn);
-                System.err.println("************************************  size = " + Server.waitersToWriteInDb.size());
 
                 if (Server.waitersToWriteInDb.size() >= 3) {
                     Iterator<Map.Entry<Integer, cacheNode>> it = Server.waitersToWriteInDb.entrySet().iterator();
@@ -78,8 +76,7 @@ public class WriteDataBase implements Runnable {
                         TThread.wasInTheDb.clear();
                     }
                 } else {
-                    System.err.println("!!!!cn.getX() = " + cn.getX());
-                    System.err.println("!!!!X = " + x);
+               
                     if (Server.waitersToWriteInDb.containsKey(x)) {
                         Server.waitersToWriteInDb.get(x).setZ(Server.waitersToWriteInDb.get(x).getZ() + 1);
                     }
@@ -94,6 +91,7 @@ public class WriteDataBase implements Runnable {
 
         raf.seek((other.getX() % Server.sizeOfDb) * 8);
         raf.writeInt(other.getY());
+        raf.seek((other.getX() % Server.sizeOfDb) * 8);
         raf.seek((other.getX() % Server.sizeOfDb) * 8 + 4);
         raf.writeInt(other.getZ());
     }
