@@ -115,17 +115,20 @@ public class WriteDataBase implements Runnable {
         raf.writeInt(other.getZ());
     }
 
-    public void update(int x) throws IOException {
-        int z, y;
-        raf.seek((x % Server.sizeOfDb) * 8);
-        y = raf.readInt();
-        raf.seek((x % Server.sizeOfDb) * 8 + 4);
-        z = raf.readInt();
-        z++;
-        raf.seek((x % Server.sizeOfDb) * 8 + 4);
-        raf.writeInt(z);
-        if (z >= Server.cache.getM()) {
-            Server.cache.insert(new cacheNode(x, y, z));
+    public void update(int x) {
+        try {
+            int z, y;
+            raf.seek((x % Server.sizeOfDb) * 8);
+            y = raf.readInt();
+            raf.seek((x % Server.sizeOfDb) * 8 + 4);
+            z = raf.readInt();
+            z++;
+            raf.seek((x % Server.sizeOfDb) * 8 + 4);
+            raf.writeInt(z);
+            if (z >= Server.cache.getM()) {
+                Server.cache.insert(new cacheNode(x, y, z));
+            }
+        } catch (IOException ex) {
         }
     }
 }
