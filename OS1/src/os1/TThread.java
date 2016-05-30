@@ -55,7 +55,6 @@ public class TThread extends Thread {
 
         try {
             y = Server.ct.getY();
-            System.err.println("cash = " + x + " " + y);
         } catch (InterruptedException ex) {
         }
 
@@ -78,8 +77,6 @@ public class TThread extends Thread {
 
         if (y == -1) {
             y = (((Server.random + x) % Server.L) + 1);
-            System.err.println("new = " + x + " " + y);
-
             cn.setY(y);
             cn.setZ(1);
             found = false;

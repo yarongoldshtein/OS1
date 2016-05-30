@@ -71,14 +71,11 @@ public class ReadDataBase implements Runnable {
                 ans = -1;
             }
             this.cn.setY(ans);
-            System.err.println("rand = " + x + " " + cn.getY());
             if (cn.getY() == -1) {
                 cacheNode tempNode = new cacheNode(Server.waitersToWriteInDb.get(x));
                 if (tempNode.getZ() != -1) {
                     this.cn.setY(tempNode.getY());
                     this.cn.setZ(tempNode.getZ());
-                    System.err.println("hash = " + x + " " + cn.getY());
-
                 }
             }
 

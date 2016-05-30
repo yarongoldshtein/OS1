@@ -56,7 +56,6 @@ public class WriteDataBase implements Runnable {
                             cacheNode enter = new cacheNode(it.next().getValue());
                             write(enter);
                             if (enter.getZ() >= Server.cache.getM()) {
-                                System.err.println("****************** enter = " + enter.toString());
                                 Server.cache.insert(enter);
                             }
                         } catch (Exception ex) {
@@ -76,11 +75,9 @@ public class WriteDataBase implements Runnable {
                 temp = raf.read();
                 if (temp >= 0) {
                     TThread.wasInTheDb.add(x);
-                    if (TThread.wasInTheDb.size() == 50) {
+                    if (TThread.wasInTheDb.size() == 30) {
                         lock.lock();
-                        System.err.println("__________size  = " + TThread.wasInTheDb.size());
-                        for (int i = 0; i<33; i++) {
-                            System.err.println("************ i= " + i+" size = "+TThread.wasInTheDb.size());
+                        for (int i = 0; i < TThread.wasInTheDb.size(); i++) {
                             update(TThread.wasInTheDb.get(i));
                         }
                         TThread.wasInTheDb.clear();
@@ -100,11 +97,8 @@ public class WriteDataBase implements Runnable {
             try {
                 Server.cache.upDateCache();
             } catch (FileNotFoundException ex) {
-                System.err.println("======================================================================================");
                 Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                System.err.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
                 Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

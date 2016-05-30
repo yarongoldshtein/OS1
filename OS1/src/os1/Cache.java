@@ -49,7 +49,7 @@ public class Cache {
 
     public void upDateCache() throws FileNotFoundException, IOException {
         if (candidates.size() >= sizeOfCandidates) {
-            
+
             Iterator<Map.Entry<Integer, cacheNode>> itMyCache = myCache.entrySet().iterator();
             String nameOfFile;
             while (itMyCache.hasNext()) {
@@ -65,7 +65,7 @@ public class Cache {
                 raf.seek((tempCn.getX() % Server.sizeOfDb) * 8 + 4);
                 raf.writeInt(tempCn.getZ());
             }
-            
+
             Iterator<Map.Entry<Integer, cacheNode>> candidatesIt = candidates.entrySet().iterator();
             while (candidatesIt.hasNext()) {
                 cacheNode tempCn = candidatesIt.next().getValue();
@@ -85,8 +85,6 @@ public class Cache {
             }
             M = arrOfCn[arrOfCn.length - C].getZ() + 1;
             candidates.clear();
-            System.err.println(candidates.toString() + "  cand  " + M);
-            System.err.println(myCache.toString() + "    " + M);
         }
     }
 

@@ -19,7 +19,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Client implements Runnable {
 
-    private static int idNum = 0;
     private final ReentrantLock lock = new ReentrantLock(true);
     private final int id;
     private int y;
@@ -27,10 +26,10 @@ public class Client implements Runnable {
     private String file;
 
     public Client(int r1, int r2, String fileName) {
-        id = getID();
         this.r1 = r1;
         this.r2 = r2;
         file = fileName;
+        id =(int) (Math.abs( r1*r2*Math.random()*1000)%10000);
     }
 
     public static int[] ArrayOfPre(String str) {
@@ -80,15 +79,6 @@ public class Client implements Runnable {
 
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private int getID() {
-        lock.lock();
-        try {
-            return idNum++;
-        } finally {
-            lock.unlock();
         }
     }
 
