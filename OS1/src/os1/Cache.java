@@ -1,9 +1,14 @@
 package os1;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -12,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Cache {
 
-    private LockedHashMap<Integer, cacheNode> myCache;
+    static LockedHashMap<Integer, cacheNode> myCache;
     private LockedHashMap<Integer, cacheNode> candidates;
     private int M;
     private final int C;
@@ -42,9 +47,25 @@ public class Cache {
         }
     }
 
-    public void upDateCache() {
+    public void upDateCache() throws FileNotFoundException, IOException {
         if (candidates.size() >= sizeOfCandidates) {
-
+            
+            Iterator<Map.Entry<Integer, cacheNode>> itMyCache = myCache.entrySet().iterator();
+            String nameOfFile;
+            while (itMyCache.hasNext()) {
+                File dir = new File("DataBase");
+                cacheNode tempCn = itMyCache.next().getValue();
+                if (tempCn.getX() >= 0) {
+                    nameOfFile = dir + "\\DataBaseNum" + (tempCn.getX() / Server.sizeOfDb) + ".txt";
+                } else {
+                    nameOfFile = dir + "\\DataBaseNum" + ((tempCn.getX() / Server.sizeOfDb) - 1) + ".txt";
+                    tempCn.setX(tempCn.getX() * (-1));
+                }
+                RandomAccessFile raf = new RandomAccessFile(nameOfFile, "rw");
+                raf.seek((tempCn.getX() % Server.sizeOfDb) * 8 + 4);
+                raf.writeInt(tempCn.getZ());
+            }
+            
             Iterator<Map.Entry<Integer, cacheNode>> candidatesIt = candidates.entrySet().iterator();
             while (candidatesIt.hasNext()) {
                 cacheNode tempCn = candidatesIt.next().getValue();

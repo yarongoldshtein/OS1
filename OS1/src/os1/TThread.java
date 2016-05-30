@@ -24,6 +24,7 @@ public class TThread extends Thread {
     private ReadWriteLockByNumber rwl = new ReadWriteLockByNumber();
     private ReentrantLock lock = new ReentrantLock(true);
     static ArrayList<Integer> wasInTheDb = new ArrayList<>();
+    private ReentrantLock lock2 = new ReentrantLock(true);
 
     private PrintWriter out;
 
@@ -40,7 +41,8 @@ public class TThread extends Thread {
 
     @Override
     public void run() {
-        while (Server.ct.getArrayOfReq().isEmpty()) {
+        lock2.lock();
+        while (Server.ct.getArrayOfReq().get(0) == null) {
             try {
                 Thread.sleep(1);
             } catch (InterruptedException ex) {
@@ -49,6 +51,7 @@ public class TThread extends Thread {
         }
         x = Server.ct.getArrayOfReq().get(0);
         cn.setX(x);
+        lock2.unlock();
 
         try {
             y = Server.ct.getY();

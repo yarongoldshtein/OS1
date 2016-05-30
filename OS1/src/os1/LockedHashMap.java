@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class LockedHashMap<Integer,cacheNode> {
 
     private HashMap<Integer, cacheNode> myHash;
-    private ReentrantLock lock = new ReentrantLock(true);
+    static ReentrantLock lock = new ReentrantLock(true);
 
     public LockedHashMap() {
         lock.lock();

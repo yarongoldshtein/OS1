@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ public class WriteDataBase implements Runnable {
     private int x;
     private boolean found;
     private RandomAccessFile raf;
+    private ReentrantLock lock = new ReentrantLock(true);
 
     public WriteDataBase(int x, cacheNode cn, boolean found) {
 
@@ -50,16 +52,18 @@ public class WriteDataBase implements Runnable {
                 if (Server.waitersToWriteInDb.size() >= 50) {
                     Iterator<Map.Entry<Integer, cacheNode>> it = Server.waitersToWriteInDb.entrySet().iterator();
                     while (it.hasNext()) {
-                        cacheNode enter = new cacheNode(it.next().getValue());
                         try {
+                            cacheNode enter = new cacheNode(it.next().getValue());
                             write(enter);
                             if (enter.getZ() >= Server.cache.getM()) {
-                                System.err.println("****************** enter = "+enter.toString());
+                                System.err.println("****************** enter = " + enter.toString());
                                 Server.cache.insert(enter);
                             }
-                        } catch (IOException ex) {
-                            Logger.getLogger(WriteDataBase.class
-                                    .getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException ex1) {
+                            }
                         }
                     }
 
@@ -73,15 +77,18 @@ public class WriteDataBase implements Runnable {
                 if (temp >= 0) {
                     TThread.wasInTheDb.add(x);
                     if (TThread.wasInTheDb.size() == 50) {
-                        for (int i = 0; i < TThread.wasInTheDb.size(); i++) {
+                        lock.lock();
+                        System.err.println("__________size  = " + TThread.wasInTheDb.size());
+                        for (int i = 0; i<33; i++) {
+                            System.err.println("************ i= " + i+" size = "+TThread.wasInTheDb.size());
                             update(TThread.wasInTheDb.get(i));
                         }
                         TThread.wasInTheDb.clear();
+                        lock.unlock();
                     }
                 } else if (Server.waitersToWriteInDb.containsKey(x)) {
                     Server.waitersToWriteInDb.get(x).setZ(Server.waitersToWriteInDb.get(x).getZ() + 1);
                     if (Server.waitersToWriteInDb.get(x).getZ() >= Server.cache.getM()) {
-                        System.err.println("***************** hashcashs = " + Server.waitersToWriteInDb.get(x).toString());
                         Server.cache.insert(Server.waitersToWriteInDb.get(x));
                     }
 
@@ -90,7 +97,16 @@ public class WriteDataBase implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            Server.cache.upDateCache();
+            try {
+                Server.cache.upDateCache();
+            } catch (FileNotFoundException ex) {
+                System.err.println("======================================================================================");
+                Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                System.err.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                Logger.getLogger(WriteDataBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -115,7 +131,6 @@ public class WriteDataBase implements Runnable {
         raf.seek((x % Server.sizeOfDb) * 8 + 4);
         raf.writeInt(z);
         if (z >= Server.cache.getM()) {
-            System.err.println("***************** update = " + new cacheNode(x, y, z).toString());
             Server.cache.insert(new cacheNode(x, y, z));
         }
     }

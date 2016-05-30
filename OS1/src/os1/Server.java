@@ -28,6 +28,7 @@ public class Server implements Runnable {
     static int L;
     static ThreadPool SearchThreadPool;
     static ThreadPool ReadersThreadPool;
+    static ThreadPool CacheThreadPool;
 
     /**
      *
@@ -43,6 +44,7 @@ public class Server implements Runnable {
         ct = new CThread();
         SearchThreadPool = new ThreadPool(S);
         ReadersThreadPool = new ThreadPool(Y);
+        CacheThreadPool = new ThreadPool(1);
     }
 
     @Override
