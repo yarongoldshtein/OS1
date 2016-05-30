@@ -29,10 +29,10 @@ public class OS1 {
             }
         }
 
-        new Thread(new Server(1, 5, 2, 5, 5)).start();
+        new Thread(new Server(100, 1, 30, 5, 5)).start();
         File f;
         for (int i = 1; i <= 5; i++) {
-            String nameOfFile = "ProbabilityFiles/" + "00" + ".txt";
+            String nameOfFile = "ProbabilityFiles/" + 0 + ".txt";
             f = new File(nameOfFile);
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);

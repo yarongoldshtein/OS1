@@ -51,8 +51,10 @@ public class CThread extends Thread {
                     System.out.println("CThread can't sleep");
                 }
             }
+            lock2.lock();
             y = cache.search(ArrayOfReq.get(0));
             ArrayOfReq.remove(0);
+            lock2.unlock();
             getYFlag = true;
         }
     }

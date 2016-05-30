@@ -96,7 +96,7 @@ public class TThread extends Thread {
         } catch (InterruptedException ex) {
             Logger.getLogger(TThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        found = true;
     }
 
 }

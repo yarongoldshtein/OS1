@@ -16,12 +16,12 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author אליצור
  */
-public class SyncHashMap<Integer,cacheNode> {
+public class LockedHashMap<Integer,cacheNode> {
 
     private HashMap<Integer, cacheNode> myHash;
     private ReentrantLock lock = new ReentrantLock(true);
 
-    public SyncHashMap() {
+    public LockedHashMap() {
         lock.lock();
         try {
             myHash = new HashMap<>();

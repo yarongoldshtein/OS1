@@ -40,7 +40,6 @@ public class SocketReader implements Runnable {
             while ((str = in.readLine()) != null) {
                 lock.lock();
                 x = Integer.parseInt(str);
-
                 Thread T =  new Thread (new TThread(out,x));
                 Server.SearchThreadPool.execute(T);
 

@@ -12,8 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Cache {
 
-    private SyncHashMap<Integer, cacheNode> myCache;
-    private SyncHashMap<Integer, cacheNode> candidates;
+    private LockedHashMap<Integer, cacheNode> myCache;
+    private LockedHashMap<Integer, cacheNode> candidates;
     private int M;
     private final int C;
     private final int sizeOfCandidates;
@@ -23,8 +23,8 @@ public class Cache {
         M = m;
         C = c;
         sizeOfCandidates = c;
-        myCache = new SyncHashMap<>();
-        candidates = new SyncHashMap<>();
+        myCache = new LockedHashMap<>();
+        candidates = new LockedHashMap<>();
     }
 
     public void insert(cacheNode cn) {
@@ -36,30 +36,37 @@ public class Cache {
                 node.setZ(node.getZ() + 1);
             } else {
                 candidates.put(cn.getX(), cn);
-                if (candidates.size() == sizeOfCandidates) {
-                    upDateCache();
-                }
             }
         } finally {
             lock.unlock();
         }
     }
 
-    private void upDateCache() {
-        myCache.putAll((Map<? extends Integer, ? extends cacheNode>) candidates);
-        cacheNode[] arrOfCn = new cacheNode[myCache.size()];
-        int i = 0;
-        Iterator<Map.Entry<Integer, cacheNode>> it = myCache.entrySet().iterator();
-        while (it.hasNext()) {
-            arrOfCn[i++] = it.next().getValue();
+    public void upDateCache() {
+        if (candidates.size() >= sizeOfCandidates) {
+
+            Iterator<Map.Entry<Integer, cacheNode>> candidatesIt = candidates.entrySet().iterator();
+            while (candidatesIt.hasNext()) {
+                cacheNode tempCn = candidatesIt.next().getValue();
+                myCache.put(tempCn.getX(), tempCn);
+            }
+//        myCache.putAll((Map<? extends Integer, ? extends cacheNode>) candidates);
+            cacheNode[] arrOfCn = new cacheNode[myCache.size()];
+            int i = 0;
+            Iterator<Map.Entry<Integer, cacheNode>> it = myCache.entrySet().iterator();
+            while (it.hasNext()) {
+                arrOfCn[i++] = it.next().getValue();
+            }
+            Arrays.sort(arrOfCn);
+            myCache.clear();
+            for (int j = arrOfCn.length - C; j < arrOfCn.length; j++) {
+                myCache.put(arrOfCn[j].getX(), arrOfCn[j]);
+            }
+            M = arrOfCn[arrOfCn.length - C].getZ() + 1;
+            candidates.clear();
+            System.err.println(candidates.toString() + "  cand  " + M);
+            System.err.println(myCache.toString() + "    " + M);
         }
-        Arrays.sort(arrOfCn);
-        myCache.clear();
-        for (int j = arrOfCn.length - C; j < arrOfCn.length; j++) {
-            myCache.put(arrOfCn[j].getX(), arrOfCn[j]);
-        }
-        candidates.clear();
-        System.out.println(myCache.toString());
     }
 
     public int search(int x) {

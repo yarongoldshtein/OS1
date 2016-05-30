@@ -34,6 +34,8 @@ public class Client implements Runnable {
     }
 
     public static int[] ArrayOfPre(String str) {
+        Thread.currentThread().setName("Client");
+
         int[] ans = new int[1000];
         double probability;
         String[] splits = str.split(",");

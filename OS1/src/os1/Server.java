@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class Server implements Runnable {
 
-    static SyncHashMap<Integer, cacheNode> waitersToWriteInDb = new SyncHashMap<>();
+    static LockedHashMap<Integer, cacheNode> waitersToWriteInDb = new LockedHashMap<>();
     private ServerSocket ServSoc;
     private ArrayList<SocketController> socArr = new ArrayList<>();
     static Cache cache;
@@ -29,7 +29,15 @@ public class Server implements Runnable {
     static ThreadPool SearchThreadPool;
     static ThreadPool ReadersThreadPool;
 
-    public Server(int S, int L, int M, int C, int Y) {
+    /**
+     *
+     * @param L - the range of answers
+     * @param M - the minimum size to enter the cache
+     * @param C - the size of cache
+     * @param S - the number of search Threads
+     * @param Y - the number of readers Threads
+     */
+    public Server(int L, int M, int C, int S, int Y) {
         this.L = L;
         cache = new Cache(M, C);
         ct = new CThread();

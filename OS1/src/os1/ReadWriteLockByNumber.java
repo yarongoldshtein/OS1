@@ -11,7 +11,7 @@ package os1;
  */
 public class ReadWriteLockByNumber {
 
-    static SyncHashMap<Integer, ReadWriteLock> HashLock = new SyncHashMap<>();
+    static LockedHashMap<Integer, ReadWriteLock> HashLock = new LockedHashMap<>();
 
     /**
      * locking the reader of the value has sent
@@ -20,6 +20,7 @@ public class ReadWriteLockByNumber {
      * @throws InterruptedException
      */
     public void ReadLock(int x) throws InterruptedException {
+        x = fixX(x);
         if (HashLock.containsKey(x)) {
             HashLock.get(x).ReadLock();
         } else {
@@ -36,6 +37,7 @@ public class ReadWriteLockByNumber {
      * @throws InterruptedException
      */
     public void ReadUnlock(int x) throws InterruptedException {
+        x = fixX(x);
         HashLock.get(x).ReadUnlock();
     }
 
@@ -46,8 +48,10 @@ public class ReadWriteLockByNumber {
      * @throws InterruptedException
      */
     public void WriteLock(int x) throws InterruptedException {
-        HashLock.get(x).WriteLock();
-
+        x = fixX(x);
+        if (HashLock.get(x) != null) {
+            HashLock.get(x).WriteLock();
+        }
     }
 
     /**
@@ -57,7 +61,23 @@ public class ReadWriteLockByNumber {
      * @throws InterruptedException
      */
     public void writeUnlock(int x) throws InterruptedException {
-        HashLock.get(x).writeUnlock();
+        x = fixX(x);
+        if (HashLock.get(x) != null) {
+            HashLock.get(x).writeUnlock();
+        }
     }
 
+    /**
+     * get the query and return the file name
+     * @param x the query
+     * @return X as the file name
+     */
+    private int fixX(int x) {
+        if (x >= 0) {
+            x = x / Server.sizeOfDb;
+        } else {
+            x = x / Server.sizeOfDb - 1;
+        }
+        return x;
+    }
 }
