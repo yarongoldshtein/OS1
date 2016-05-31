@@ -27,11 +27,19 @@ public class SocketReader implements Runnable {
     private final int L;
     private final ReentrantLock lock = new ReentrantLock(true);
 
+    /**
+     * SocketReader constractor
+     * @param SocCon
+     * @param l 
+     */
     public SocketReader(SocketController SocCon, int l) {
         this.SocCon = SocCon;
         L = l;
     }
 
+    /**
+     * Receiving a query and puts it into Search Thread Pool
+     */
     @Override
     public void run() {
         try {

@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * The Thread that Search at the Cache&Database
  *
  * @author אליצור
  */
@@ -20,14 +21,20 @@ public class TThread extends Thread {
     private int y;
     private int x;
     private cacheNode cn;
-    private boolean found = true;
-    private ReadWriteLockByNumber rwl = new ReadWriteLockByNumber();
-    private ReentrantLock lock = new ReentrantLock(true);
-    static ArrayList<Integer> wasInTheDb = new ArrayList<>();
-    private ReentrantLock lock2 = new ReentrantLock(true);
-
     private PrintWriter out;
+    static int TThreadNo = 0;
+    private boolean found = true;
+    private ReentrantLock lock = new ReentrantLock(true);
+    private ReentrantLock lock2 = new ReentrantLock(true);
+    static ArrayList<Integer> wasInTheDb = new ArrayList<>();
+    private ReadWriteLockByNumber rwl = new ReadWriteLockByNumber();
 
+    /**
+     * TThread constractor
+     *
+     * @param out Socket out for print the answer to the query
+     * @param x the query
+     */
     public TThread(PrintWriter out, int x) {
         lock.lock();
         try {
@@ -39,9 +46,16 @@ public class TThread extends Thread {
         }
     }
 
+    /**
+     * Looking back caching if it finds an answer , if I did not go looking for
+     * a database if it finds an answer back , if I did not write to a database
+     * . Anyway do an update of the z instead found the answer . If the z
+     * reaches m then it updates the cache
+     */
     @Override
     public void run() {
         lock2.lock();
+        Thread.currentThread().setName("TThreadNo" + (TThreadNo++));
         while (Server.ct.getArrayOfReq().get(0) == null) {
             try {
                 Thread.sleep(1);

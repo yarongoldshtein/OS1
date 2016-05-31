@@ -23,14 +23,23 @@ public class ReadDataBase implements Runnable {
     private boolean runFlag = true;
     private boolean getYFlag = false;
     private final ReentrantLock lock = new ReentrantLock(true);
+    static int ReadDataBaseNo = 0;
 
+    /**
+     * ReadDataBase constractor
+     * @param x 
+     */
     public ReadDataBase(int x) {
         this.x = x;
         cn.setX(x);
     }
 
+    /**
+     * search the query in the Database
+     */
     @Override
     public void run() {
+        Thread.currentThread().setName("ReadDataBaseNo"+(ReadDataBaseNo++));
         int ans;
         lock.lock();
         try {
@@ -85,6 +94,11 @@ public class ReadDataBase implements Runnable {
         }
     }
 
+    /**
+     * 
+     * @return node with the answer
+     * @throws InterruptedException 
+     */
     public cacheNode getNode() throws InterruptedException {
         while (!getYFlag) {
             Thread.sleep(50);

@@ -22,6 +22,11 @@ public class SocketManager implements Runnable {
     private SocketController SocCon;
     private final int L;
 
+    /**
+     * SocketManager constractor
+     * @param socArr
+     * @param l 
+     */
     public SocketManager(ArrayList<SocketController> socArr, int l) {
         this.socArr = socArr;
         L = l;

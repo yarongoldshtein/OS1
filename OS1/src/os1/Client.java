@@ -14,7 +14,7 @@ import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * Client sends queries to the server
  * @author אליצור
  */
 public class Client implements Runnable {
@@ -22,18 +22,33 @@ public class Client implements Runnable {
     private final ReentrantLock lock = new ReentrantLock(true);
     private final int id;
     private int y;
-    private final int r1, r2;
+    private final int R1, R2;
     private String file;
+    static int ClientNo = 0;
 
-    public Client(int r1, int r2, String fileName) {
-        this.r1 = r1;
-        this.r2 = r2;
+    /**
+     * Client constractor
+     *
+     * @param R1 Beginning of term questions
+     * @param R2 End of term questions
+     * @param fileName
+     */
+    public Client(int R1, int R2, String fileName) {
+        this.R1 = R1;
+        this.R2 = R2;
         file = fileName;
-        id =(int) (Math.abs( r1*r2*Math.random()*1000)%10000);
+        id = (int) (Math.abs(R1 * R2 * Math.random() * 1000) % 10000);
     }
 
+    /**
+     * set ArrayOfPreformance Takes from a range of probabilities and by
+     * probabilities and help fill an array size of 1000
+     *
+     * @param str line from a range of probabilities
+     * @return Array of preformance
+     */
     public static int[] ArrayOfPre(String str) {
-        Thread.currentThread().setName("Client");
+        Thread.currentThread().setName("Client" + (ClientNo++));
 
         int[] ans = new int[1000];
         double probability;
@@ -51,6 +66,11 @@ public class Client implements Runnable {
         return ans;
     }
 
+    /**
+     * The client opens a socket server and sending it a random query from the
+     * Array of preformance , the client waits for a response and prints it and
+     * back again ( not open again Socket )
+     */
     @Override
     public void run() {
         Socket soc;
@@ -82,6 +102,11 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param ArrayOfPreformance
+     * @return Query randomly from the Array
+     */
     public static int getX(int[] ArrayOfPreformance) {
         int x = (int) (Math.random() * 1000);
         return ArrayOfPreformance[x];

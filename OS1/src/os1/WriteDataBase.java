@@ -16,15 +16,21 @@ import java.util.logging.Logger;
  */
 public class WriteDataBase implements Runnable {
 
-    private cacheNode cn;
-    private String nameOfFile;
     private int x;
+    private cacheNode cn;
     private boolean found;
+    private String nameOfFile;
     private RandomAccessFile raf;
+    static int WriteDataBaseNo = 0;
     private ReentrantLock lock = new ReentrantLock(true);
 
+    /**
+     * WruteDataBase constractor
+     * @param x the query
+     * @param cn the y & z of this query 
+     * @param found 
+     */
     public WriteDataBase(int x, cacheNode cn, boolean found) {
-
         this.cn = cn;
         this.x = x;
         this.found = found;
@@ -33,6 +39,7 @@ public class WriteDataBase implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setName("WriteDataBaseNo" + (WriteDataBaseNo++));
         try {
             File dir = new File("DataBase");
             if (x >= 0) {
@@ -99,6 +106,11 @@ public class WriteDataBase implements Runnable {
 
     }
 
+    /**
+     * change the data in the RanddomAcsessFile acording the Other data
+     * @param other
+     * @throws IOException 
+     */
     public void write(cacheNode other) throws IOException {
 
         other.setX(Math.abs(other.getX()));
@@ -109,6 +121,10 @@ public class WriteDataBase implements Runnable {
         raf.writeInt(other.getZ());
     }
 
+    /**
+     * update the z for this query
+     * @param x query
+     */
     public void update(int x) {
         try {
             int z, y;

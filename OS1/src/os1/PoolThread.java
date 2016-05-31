@@ -3,7 +3,7 @@ package os1;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * Threads in the ThreadPool
  * @author yaron
  */
 public class PoolThread extends Thread {
@@ -12,10 +12,17 @@ public class PoolThread extends Thread {
     private boolean isStopped = false;
     private final ReentrantLock lock = new ReentrantLock(true);
 
+    /**
+     * poolThread constractor
+     * @param queue 
+     */
     public PoolThread(BlockingQueue queue) {
         taskQueue = queue;
     }
 
+    /**
+     * insert new poolthread to taskQueue of ThreadPool
+     */
     @Override
     public void run() {
         while (!isStopped()) {
@@ -28,6 +35,7 @@ public class PoolThread extends Thread {
         }
     }
 
+    
     public void doStop() {
         lock.lock();
         try {
@@ -38,6 +46,10 @@ public class PoolThread extends Thread {
         }
     }
 
+    /**
+     * 
+     * @return isStooped
+     */
     public boolean isStopped() {
         lock.lock();
         try {

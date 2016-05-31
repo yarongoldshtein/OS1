@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * control the Sockets
  * @author yaron
  */
 public class SocketController {
@@ -22,6 +22,10 @@ public class SocketController {
     private PrintWriter out;
     private BufferedReader in;
 
+    /**
+     * SocketController constractor
+     * @param soc 
+     */
     public SocketController(Socket soc) {
         try {
             out = new PrintWriter(soc.getOutputStream());
@@ -32,18 +36,34 @@ public class SocketController {
         }
     }
 
+    /**
+     * 
+     * @return out from this socket
+     */
     public PrintWriter getOut() {
         return out;
     }
 
+    /**
+     * set this Socket out
+     * @param out 
+     */
     public void setOut(PrintWriter out) {
         this.out = out;
     }
 
+    /**
+     * 
+     * @return in from this Socket
+     */
     public BufferedReader getIn() {
         return in;
     }
 
+    /**
+     * set this socket in
+     * @param in 
+     */
     public void setIn(BufferedReader in) {
         this.in = in;
     }

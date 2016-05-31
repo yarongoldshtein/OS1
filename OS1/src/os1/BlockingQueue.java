@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * BlockingQueue for ThreadPool
  * @author yaron
  */
 public class BlockingQueue {
@@ -15,6 +15,11 @@ public class BlockingQueue {
     private final ReentrantLock lock = new ReentrantLock(true);
     private final Condition cond = lock.newCondition();
 
+    /**
+     * insert to the queue
+     * @param item
+     * @throws InterruptedException 
+     */
     public void enqueue(Object item) throws InterruptedException {
         lock.lock();
         try {
@@ -26,6 +31,11 @@ public class BlockingQueue {
 
     }
 
+    /**
+     * Removal of the object at the top of the queue
+     * @return top of the queue
+     * @throws InterruptedException 
+     */
     public Object dequeue() throws InterruptedException {
         lock.lock();
         try {
@@ -38,6 +48,10 @@ public class BlockingQueue {
         }
     }
 
+    /**
+     * checking if the queue is empty
+     * @return true- empty / false - there is Object in the queue
+     */
     public boolean isEmpty() {
         lock.lock();
         try {

@@ -31,7 +31,7 @@ public class Server implements Runnable {
     static ThreadPool CacheThreadPool;
 
     /**
-     *
+     * Server constractor
      * @param L - the range of answers
      * @param M - the minimum size to enter the cache
      * @param C - the size of cache
@@ -46,6 +46,7 @@ public class Server implements Runnable {
         ReadersThreadPool = new ThreadPool(Y);
         CacheThreadPool = new ThreadPool(1);
     }
+
 
     @Override
     public void run() {

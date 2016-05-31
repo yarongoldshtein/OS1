@@ -6,7 +6,7 @@
 package os1;
 
 /**
- *
+ * Object save x, y, z
  * @author yaron
  */
 public class cacheNode implements Comparable<Object> {
@@ -15,18 +15,31 @@ public class cacheNode implements Comparable<Object> {
     private int y;
     private int z;
 
+    /**
+     * defult constractor
+     */
     public cacheNode() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
     }
 
+    /**
+     * constractor that get data
+     * @param x
+     * @param y
+     * @param z 
+     */
     public cacheNode(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     * copy constractor ( deep copy)
+     * @param other 
+     */
     public cacheNode(cacheNode other) {
         if (other != null) {
             this.x = other.x;
@@ -39,14 +52,26 @@ public class cacheNode implements Comparable<Object> {
         }
     }
 
+    /**
+     * 
+     * @return this.x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * 
+     * @return this.y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * 
+     * @return this.z
+     */
     public int getZ() {
         return z;
     }
@@ -79,14 +104,26 @@ public class cacheNode implements Comparable<Object> {
         return "{" + "x=" + x + ", y=" + y + ", z=" + z + "}";
     }
 
+    /**
+     * set this.x
+     * @param x new x
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * set this.y
+     * @param y new y
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * set this.z
+     * @param z new z
+     */
     public void setZ(int z) {
         this.z = z;
     }

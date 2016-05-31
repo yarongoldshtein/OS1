@@ -15,14 +15,20 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Cache {
 
-    static LockedHashMap<Integer, cacheNode> myCache;
-    private LockedHashMap<Integer, cacheNode> candidates;
     private int M;
     private final int C;
     private final int sizeOfCandidates;
+    static LockedHashMap<Integer, cacheNode> myCache;
+    private LockedHashMap<Integer, cacheNode> candidates;
     private final ReentrantLock lock = new ReentrantLock(true);
     private final ReentrantLock lock2 = new ReentrantLock(true);
 
+    /**
+     * Cache constractor
+     *
+     * @param m
+     * @param c
+     */
     public Cache(int m, int c) {
         M = m;
         C = c;
@@ -31,6 +37,11 @@ public class Cache {
         candidates = new LockedHashMap<>();
     }
 
+    /**
+     * insert CacheNode to candidates (to cache) , they come here if the Z > M
+     *
+     * @param cn - CacheNode is about to to candidates
+     */
     public void insert(cacheNode cn) {
 
         lock.lock();
@@ -46,6 +57,14 @@ public class Cache {
         }
     }
 
+    /**
+     * Checks should update cache if need updating Starts updating the database
+     * of contemporary data cache And then copies the same sorts cache
+     * candidates and choose the biggest C and leave it deletes the cache and
+     * updating the M size of the smallest element in the cache plus 1
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void upDateCache() throws FileNotFoundException, IOException {
         if (candidates.size() >= sizeOfCandidates) {
             lock2.lock();
@@ -65,7 +84,7 @@ public class Cache {
                     raf.seek((tempCn.getX() % Server.sizeOfDb) * 8 + 4);
                     raf.writeInt(tempCn.getZ());
                 }
-                
+
                 Iterator<Map.Entry<Integer, cacheNode>> candidatesIt = candidates.entrySet().iterator();
                 while (candidatesIt.hasNext()) {
                     cacheNode tempCn = candidatesIt.next().getValue();
@@ -90,6 +109,11 @@ public class Cache {
         }
     }
 
+    /**
+     * Looking for query at the cache if he finds updating its z
+     * @param x our query
+     * @return the answer ( If he had not found it returns -1)
+     */
     public int search(int x) {
         lock2.lock();
         try {
